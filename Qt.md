@@ -95,6 +95,7 @@ Options:
    ```cpp
    QApplication app(argc, argv);
    QTranslator translator;
+   // 直接加载指定的翻译文件
    translator.load("trans_zh_CN.qm");
    // 按系统设置自动加载不同的翻译文件，第二个参数是qm文件的相对目录
    translator.load("trans_" + QLocale::system().name(), "translations");
@@ -102,6 +103,10 @@ Options:
    ```
 
 ## 单元测试
+
+1. 基本设置
+
+pro工程文件加QT += testlib
 
 ```cpp
 // 1. 包含头文件并且测试用例类必须继承QObject，测试函数必须声明为private slots
@@ -116,10 +121,41 @@ private slots:
         QString str = "Hello";
         QVERIFY(str.toUpper() == "HELLO");
     }
-}
+};
 
 // 2. 声明运行单元测试所需的main函数
 QTEST_MAIN(TestQString)
 // 3. 如果测试用例类的声明和定义在同一个cpp里还需要包含对应的moc文件
 #include "testqstring.moc"
+```
+
+2. 数据驱动的单元测试
+
+```cpp
+class TestQString: public QObject
+{
+    Q_OBJECT
+
+private slots:
+    void toUpper_data();    // toUpper测试的数据准备，必须以_data结尾
+    void toUpper();
+};
+// 整个数据就是一个表格
+void TestQString::toUpper_data()
+{
+    QTest::addColumn<QString>("string");
+    QTest::addColumn<QString>("result");
+
+    QTest::newRow("all lower") << "hello" << "HELLO";
+    QTest::newRow("mixed")     << "Hello" << "HELLO";
+    QTest::newRow("all upper") << "HELLO" << "HELLO";
+}
+// 测试会循环3次
+void TestQString::toUpper()
+{
+    QFETCH(QString, string);
+    QFETCH(QString, result);
+
+    QCOMPARE(string.toUpper(), result);
+}
 ```
