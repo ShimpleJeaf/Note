@@ -259,6 +259,11 @@ database "database" {
 
 ## 辅助布局
 
+* **方向**
+  
+  left to right direction
+  top to bottom direction
+
 * **together隐式分组**
   
   分组后如同**package**，布局会有和组合组件一样的问题，**组件不会自动排列到组合组件的下方**
@@ -299,20 +304,16 @@ together {
 [[6. Layout — The Hitchhiker's Guide to PlantUML documentation (crashedmind.github.io)](https://crashedmind.github.io/PlantUMLHitchhikersGuide/layout/layout.html)]
 
 * **节点间距和连线间距**
-
+  
   skinparam nodesep 5
-
+  
   skinparam ranksep 20
 
-* 箭头加粗和长箭头
-  
+* **箭头加粗和长箭头**
+
 ```plantuml
 @startuml
 [A] -[bold]-> [B]
 [C] --------------> [D]
 @enduml
 ```
-
-
-
-
