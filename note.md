@@ -287,8 +287,4 @@ clang-uml -c config.yaml
 
 config.yaml中的add_compile_flags:添加-I头文件目录选项
 
-# PlantUML QEditor
-
-```
-
-```
+# 
