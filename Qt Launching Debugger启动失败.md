@@ -4,4 +4,4 @@
 解决方法：
 将旧的Kit克隆一个副本，修改Kit的debugger到最新版即可
 [https://forum.qt.io/topic/157956/launching-debugge-error](https://forum.qt.io/topic/157956/launching-debugge-error)
-![在这里插入图片描述](pictures/qt_launching_debugger.png)
+![在这里插入图片描述](img/qt_launching_debugger.png)

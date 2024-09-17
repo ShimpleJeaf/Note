@@ -16,8 +16,6 @@
 qt-online-installer-windows-x64-4.8.0.exe --mirror https://mirrors.tuna.tsinghua.edu.cn/qt
 ```
 
-或
-
 ```bat
 MaintenanceTool.exe --mirror https://mirrors.tuna.tsinghua.edu.cn/qt
 ```
@@ -25,11 +23,11 @@ MaintenanceTool.exe --mirror https://mirrors.tuna.tsinghua.edu.cn/qt
 ## 3. 镜像拒绝连接（server replied: Forbidden）
 
 用国内源下载时有时会遇到“无法下载存档。。。。。。 - server replied: Forbidden”的问题，可以换其他源进行下载。
-![在这里插入图片描述](pictures/qt_install_online_1.png)
+![在这里插入图片描述](img/qt_install_online_1.png)
 
 可以在下面网页查看官方推荐的镜像：
 [https://download.qt.io/online/qtsdkrepository/windows_x86/root/qt/Updates.xml.mirrorlist](https://download.qt.io/online/qtsdkrepository/windows_x86/root/qt/Updates.xml.mirrorlist)
-![在这里插入图片描述](pictures/qt_install_online_2.png)
+![在这里插入图片描述](img/qt_install_online_2.png)
 
 国内镜像（CN）
 https://mirrors.ustc.edu.cn/qtproject
