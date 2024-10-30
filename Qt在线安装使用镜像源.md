@@ -16,6 +16,8 @@
 qt-online-installer-windows-x64-4.8.0.exe --mirror https://mirrors.tuna.tsinghua.edu.cn/qt
 ```
 
+或
+
 ```bat
 MaintenanceTool.exe --mirror https://mirrors.tuna.tsinghua.edu.cn/qt
 ```
