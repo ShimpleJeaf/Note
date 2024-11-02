@@ -184,3 +184,135 @@ QVariant property(QString name)
     background-color: lime;
 }
 ```
+
+**注意**
+
+Q_PROPERTY只是声明cursor是一个属性，cursor、setCursor、unsetCursor等函数依然需要自己在类内进行声明和定义。
+
+## QElapsedTimer 计算时间间隔ns
+
+```cpp
+elapsed()         // 毫秒
+nsecsElapsed()    // 纳秒
+```
+
+elapsed 过去的，经过的
+
+## processEvents 强制处理Qt事件
+
+如果某处理需要长时间占用CPU时间片，就可以偶尔调用该函数将事件队列里未处理的时间派发出去，让事件接收对象处理，避免界面卡住。
+
+void QCoreApplication::processEvents(QEventLoop::ProcessEventsFlags flags = QEventLoop::AllEvents)
+
+## 文件系统操作和文件读写
+
+### 特定格式文件的读写
+
+#### xml
+
+* **QDomDocument**
+
+* **QXmlStreamReader、QXmlStreamWriter**流式读写
+
+#### json
+
+相比于xml，json文件编解码难度低，文件更小。
+
+* **QJsonDocument**
+  
+  读写json文件
+- **QJsonArray、QJsonObject、QJsonValue**
+  
+  分别封装json的数组、对象和值类，json有6种基本数据类型：bool、double、string、array、object、 null。
+
+#### 图片
+
+* **QImage、QPixmap**
+
+* **QImageReader、QImageWriter**
+
+### 目录和文件操作
+
+* QCoreApplication
+
+* QFile
+
+* QFileInfo
+
+* QDir
+
+* QTemporaryDir
+
+* QTemporaryFile
+
+* QFileSystemWatcher
+
+#### QCoreApplication
+
+* QString applicationDirPath()
+
+* QString applicationFilePath()
+
+* QString applicationName() 无后缀
+
+* QStringList libraryPath()
+
+* void addLibraryPath(QString& path)
+
+* QString organizationName() 组织名
+
+* void setOrganizationName(QString& name)
+
+#### QFile
+
+#### QFileInfo
+
+#### QTemporaryDir
+
+#### QTemporaryFile
+
+#### QFileSystemWatcher
+
+当目录下发生新建、删除文件等操作时，会发射directoryChanged()信号
+
+当所监视的文件发生修改、重命名等操作时，会发射fileChanged()信号
+
+### 读写文本文件
+
+#### 用QFile读写文本文件
+
+read()
+
+readChar()
+
+readLine()
+
+readAll()
+
+write()
+
+putChar()
+
+flush() 将缓存写入文件
+
+bool atEnd() 判断是否到达文件末尾
+
+open()
+
+close()
+
+#### 用QSaveFile保存文件
+
+会生成一个临时文件，commit时才写入修改目标文件。
+
+commit()
+
+cancelWriting()
+
+#### 用QFile和QTextStream读写文本文件
+
+QTextStream(QIODevice* device)
+
+支持<<和>>操作
+
+### 读写二进制文件 QDataStream
