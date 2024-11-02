@@ -159,3 +159,28 @@ void TestQString::toUpper()
     QCOMPARE(string.toUpper(), result);
 }
 ```
+
+## 属性系统 Q_PROPERTY
+
+```cpp
+Q_PROPERTY(bool focus READ hasFocus)
+Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled)
+Q_PROPERTY(QCursor cursor READ cursor WRITE setCursor RESET unsetCursor)
+```
+
+**动态属性**
+
+```cpp
+bool setProperty(QString name, QVariant value)
+QVariant property(QString name)
+```
+
+使用setProperty()设置属性时，如果name不存在，会新建一个属性，该属性就为**动态属性**，该属性只能通过property()读取。
+
+**在qss中使用**
+
+```css
+*[required="true"] {
+    background-color: lime;
+}
+```
