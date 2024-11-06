@@ -204,6 +204,14 @@ elapsed 过去的，经过的
 
 void QCoreApplication::processEvents(QEventLoop::ProcessEventsFlags flags = QEventLoop::AllEvents)
 
+## QScrollArea和AdjustSize()
+
+- **QScrollArea**不会因为自动布局而改变大小，必须手动调用setFixedSize()、setFixedHeight()、setFixedWidth()改变其大小。
+  
+  其默认会内嵌一个QWidget，该widget大小大于QScrollArea的大小时就会显示滚动条。
+
+- 当一个窗口内的某个控件隐藏时，其他同级（在同一个layout里）的控件会自动占有空出的空间，整个窗口的大小是不会变的。如果想要整个窗口改变大小适应控件显隐造成的大小改变，可以调用**adjustSize()** 函数，该函数会递归调整子窗口，适应各自内部的内容。
+
 ## 文件系统操作和文件读写
 
 ### 特定格式文件的读写
