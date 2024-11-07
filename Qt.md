@@ -212,7 +212,110 @@ void QCoreApplication::processEvents(QEventLoop::ProcessEventsFlags flags = QEve
 
 - 当一个窗口内的某个控件隐藏时，其他同级（在同一个layout里）的控件会自动占有空出的空间，整个窗口的大小是不会变的。如果想要整个窗口改变大小适应控件显隐造成的大小改变，可以调用**adjustSize()** 函数，该函数会递归调整子窗口，适应各自内部的内容。
 
-## qss中的长度单位
+## Qt Style Sheets（qss）
+
+Qt参考文档 （Qt Assistance）搜索以下关键词即可。
+
+Qt Style Sheets：介绍
+
+Qt Style Sheets Reference：详细参考文档
+
+### The Style Sheet Syntax 语法
+
+```qss
+QPushButton { color: red } /*最后一个可以不加分号*/
+QPushButton { color: red; backgroud-color: white }
+
+/*多个*/
+QPushButton, QLineEdit, QComboBox { color: red }
+```
+
+### Selector Types 选择器
+
+| selector                    | explanation     |
+| --------------------------- | --------------- |
+| *                           | 全选              |
+| QPushButton                 | 按类型             |
+| QPushButton\[flat="false"\] | 按属性             |
+| .QPushButton                | 按类型，但只包括自己，孩子不选 |
+| QPushButton#okButton        | 按名称             |
+| QDialog QPushButton         | 孩子、孙子。。。类       |
+| QDialog *                   | 所有类型的孩子、孙子。。。类  |
+| QDialog > QPushButton       | 直接孩子类           |
+
+### Sub-Controls 子控制器
+
+```qss
+QComboxBox::drop-down { image: url(dropdown.png) }
+```
+
+### Pseudo-States 状态
+
+```qss
+QPushButton:hover { color: white }
+QPushButton:hover:!pressed { color: blue } /* 状态AND */
+QCheckBox:hover, QCheckBox:checked { color: white } /* 状态OR */
+```
+
+### Conflict Resolution 冲突解决
+
+* 更具体的优先
+
+* 同级时后出现的优先（覆盖）
+  
+  A selector's specificity is calculated as follows:
+  
+  - count the number of ID attributes in the selector (= a)
+  - count the number of other attributes and pseudo-classes in the selector (= b)
+  - count the number of element names in the selector (= c)
+  - ignore pseudo-elements
+  
+  Concatenating the three numbers a-b-c (in a number system with a large base) gives the specificity.
+  
+  Some examples:
+  
+  | 优先级 | example          | specificity value                      |
+  | --- | ---------------- | -------------------------------------- |
+  | 最低级 | \*               | /* a=0 b=0 c=0 -> specificity = 0 */   |
+  |     | LI               | /* a=0 b=0 c=1 -> specificity = 1 */   |
+  |     | UL LI            | /* a=0 b=0 c=2 -> specificity = 2 */   |
+  |     | UL OL+LI         | /* a=0 b=0 c=3 -> specificity = 3 */   |
+  |     | H1 + \*\[REL=up] | /* a=0 b=1 c=1 -> specificity = 11 */  |
+  |     | UL OL LI.red     | /* a=0 b=1 c=3 -> specificity = 13 */  |
+  |     | LI.red.level     | /* a=0 b=2 c=1 -> specificity =c 21 */ |
+  | 最高级 | #x34y            | /* a=1 b=0 c=0 -> specificity = 100 */ |
+
+### Cascading 层叠
+
+* 子对象会继承父对象的qss
+
+* 子对象设置qss后，优先用子对象的qss，不管qss语法优先级是怎样的
+
+### Inheritance 继承
+
+* css子部件会继承父对象的font和color，但qss不会，必须直接指定
+
+* setFont()和setPalette()会传播到子部件
+
+* 设置子部件字体和颜色传播：[QCoreApplication](../qtcore/qcoreapplication.html)::setAttribute([Qt](../qtcore/qt.html)::AA_UseStyleSheetPropagationInWidgetStyles, true);
+
+### 详解
+
+* QTabWidget
+  
+  :tab-bar
+  
+  :pane
+
+* QTabBar
+  
+  ::tab
+  
+  ::tear
+  
+  ::scroller
+
+### qss中的长度单位
 
 以下是从CSS里抄来的。QSS只能支持其中一部分。
 
