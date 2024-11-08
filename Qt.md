@@ -222,7 +222,7 @@ Qt Style Sheets Reference：详细参考文档
 
 ### The Style Sheet Syntax 语法
 
-```qss
+```css
 QPushButton { color: red } /*最后一个可以不加分号*/
 QPushButton { color: red; backgroud-color: white }
 
@@ -232,26 +232,27 @@ QPushButton, QLineEdit, QComboBox { color: red }
 
 ### Selector Types 选择器
 
-| selector                    | explanation     |
-| --------------------------- | --------------- |
-| *                           | 全选              |
-| QPushButton                 | 按类型             |
-| QPushButton\[flat="false"\] | 按属性             |
-| .QPushButton                | 按类型，但只包括自己，孩子不选 |
-| QPushButton#okButton        | 按名称             |
-| QDialog QPushButton         | 孩子、孙子。。。类       |
-| QDialog *                   | 所有类型的孩子、孙子。。。类  |
-| QDialog > QPushButton       | 直接孩子类           |
+| selector   | example                     | explanation     |
+| ---------- | --------------------------- | --------------- |
+| Universal  | *                           | 全选              |
+| Type       | QPushButton                 | 按类型，含子类         |
+| Property   | QPushButton\[flat="false"\] | 按属性             |
+| Class      | .QPushButton                | 按类型，但只包含自己，不含子类 |
+| ID         | QPushButton#okButton        | 按名称             |
+| ID         | #okButton                   | 按名称             |
+| Descendant | QDialog QPushButton         | 孩子、孙子。。。对象      |
+| Descendant | QDialog *                   | 所有类型的孩子、孙子。。。对象 |
+| Child      | QDialog > QPushButton       | 直接孩子对象          |
 
 ### Sub-Controls 子控制器
 
-```qss
+```css
 QComboxBox::drop-down { image: url(dropdown.png) }
 ```
 
 ### Pseudo-States 状态
 
-```qss
+```css
 QPushButton:hover { color: white }
 QPushButton:hover:!pressed { color: blue } /* 状态AND */
 QCheckBox:hover, QCheckBox:checked { color: white } /* 状态OR */
@@ -317,57 +318,17 @@ QCheckBox:hover, QCheckBox:checked { color: white } /* 状态OR */
 
 ### qss中的长度单位
 
-以下是从CSS里抄来的。QSS只能支持其中一部分。
+qss中如果不指定单位的话，早期版本大多数默认为px，最好自己指定。
 
-1、px：像素(Pixel),相对于设备的长度单位，像素是相对于显示器屏幕分辨率而言的。譬如，WONDOWS的用户所使用的分辨率一般是96像素/英寸。而MAC的用户所使用的分辨率一般是72像素/英寸。
+* px: pixels
 
-像素（px）是相对于观看设备的。对于低 dpi 的设备，1px 是显示器的一个设备像素（点）。对于打印机和高分辨率屏幕，1px 表示多个设备像素。
+* pt: the size of one point (i.e., 1/72 of an inch)
 
-css容器的大小我们经常用px做单位;字体大小(font-size)很多人用px做单位，其实用px做字体单位唯一的致命缺点就是在IE下无法用浏览器字体缩放的功能。
+* em: the size relative to the font size of the element (e.g., 2em means 2 times the size of the font)
 
-2、em：相对长度单位。相对于元素的字体大小（font-size），如果当前行内文本的字体尺寸未被人为设置，则相对于浏览器的默认字体尺寸。3em 表示当前字体大小的 3 倍
+* ex: the x-height of the font (i.e., the height of 'x')
 
-显然，这个单位不能用于设置字体font-size。
-
-3、pt：点(Point)，绝对长度单位。可以尝试和下面的in英寸进行对比，1pt = 1/72 of 1in；
-
-qss中只能用于字体，不能用来设置其他属性的长度。
-
-4、ex：相对长度单位。相对于字符“x”的高度。此高度通常为字体尺寸的一半。如当前对行内文本的字体尺寸未被人为设置，则相对于浏览器的默认字体尺寸。 相对于当前字体的 x-height(极少使用)
-
-显然，这个单位不能用于设置字体font-size。
-
-5、pc：派卡(Pica)，绝对长度单位。相当于我国新四号铅字的尺寸。1pc = 12 pt
-
-qss不支持
-
-6、in：英寸(Inch)，绝对长度单位。1in = 96px = 2.54cm
-
-qss不支持
-
-7、mm：毫米(Millimeter)，绝对长度单位。国人常用的尺寸；
-
-qss不支持
-
-8、cm：厘米(Centimeter)，绝对长度单位。国人常用的尺寸；
-
-qss不支持
-
-9、ch：相对长度单位。相对于 "0"（零）的宽度；qss不支持
-
-10、rem：相对长度单位。相对于根元素的字体大小（font-size）；qss不支持
-
-11、vw：相对长度单位。相对于视口*宽度的 1%；qss不支持
-
-12、vh：相对长度单位。相对于视口*高度的 1%；qss不支持
-
-13、vmin：相对长度单位。相对于视口*较小尺寸的 1％ ，vw和vh中较小的那个；
-
-14、vmax：相对长度单位。相对于视口*较大尺寸的 1％，vw和vh中较大的那个；
-
- 视口（Viewport）= 浏览器窗口的尺寸。如果视口宽 50 里面，则 1vw = 0.5cm。15、%：相对长度单位。相对于父元素
-
-其中：1in = 2.54cm = 25.4 mm = 72pt = 6pc ;
+Qt中font只支持pt和px，而其他的只支持px，em或ex。
 
 ## 文件系统操作和文件读写
 
