@@ -210,7 +210,49 @@ void QCoreApplication::processEvents(QEventLoop::ProcessEventsFlags flags = QEve
   
   其默认会内嵌一个QWidget，该widget大小大于QScrollArea的大小时就会显示滚动条。
 
-- 当一个窗口内的某个控件隐藏时，其他同级（在同一个layout里）的控件会自动占有空出的空间，整个窗口的大小是不会变的。如果想要整个窗口改变大小适应控件显隐造成的大小改变，可以调用**adjustSize()** 函数，该函数会递归调整子窗口，适应各自内部的内容。
+- 当一个窗口内的某个控件隐藏时，其他同级（在同一个layout里）的控件会自动占有空出的空间，整个窗口的大小是不会变的。如果想要整个窗口改变大小适应控件显隐造成的大小改变，可以调用**adjustSize()** 函数。
+
+- adjustSize()有时候不能立即生效，比如QScrollArea里面自带的widget调用时遇到需要重新打开窗口才能生效的情况，改为SetFixedSize()就可以了。
+
+## blockSignals(bool)
+
+阻塞当前类发出信号，这些信号会被丢弃，不会进入队列，自身子部件发出的信号不会被阻断。
+
+当给控件设置数据时可以用，这样外部就不会收到通知，直到全部数据设置完成。
+
+signalsBlocked()可以查询是否被阻塞
+
+## pressed和clicked信号的区别
+
+pressed对应mousePressEvent()，按下即发出
+
+clicked对应mouseReleaseEvent()，按下释放后发出，并且释放时鼠标需要在控件内
+
+## 数字转字符串去除尾数0
+
+```cpp
+QString::number(value, 'f', QLocale::FloatingPointShortest)
+```
+
+## QTextDocument
+
+在QTextDocument中使用html时，字体颜色只能html中用color属性指定，用QTextCuror的QTextCharFormat是无效的。
+
+### QTextCursor
+
+* setCharFormart()：设置文字格式，全部替换
+
+* mergeCharFormat()：融合文字格式，新的QTextCharFormat的属性和原有的冲突时才替换，新的没有指定的属性用原有的
+
+## 设置无边框窗口或独立窗口圆角
+
+设置背景透明Qt::WA_TranslucentBackground时，必须要设置背景颜色和FramelessWindowHint，不然会无效
+
+```cpp
+view()->window()->setWindowFlags(Qt::Popup | Qt::FramelessWindowHint 
+                                | Qt::NoDropShadowWindowHint);
+view()->window()->setAttribute(Qt::WA_TranslucentBackground);
+```
 
 ## Qt Style Sheets（qss）
 
@@ -222,7 +264,7 @@ Qt Style Sheets Reference：详细参考文档
 
 ### The Style Sheet Syntax 语法
 
-```qss
+```css
 QPushButton { color: red } /*最后一个可以不加分号*/
 QPushButton { color: red; backgroud-color: white }
 
@@ -245,13 +287,13 @@ QPushButton, QLineEdit, QComboBox { color: red }
 
 ### Sub-Controls 子控制器
 
-```qss
+```css
 QComboxBox::drop-down { image: url(dropdown.png) }
 ```
 
 ### Pseudo-States 状态
 
-```qss
+```css
 QPushButton:hover { color: white }
 QPushButton:hover:!pressed { color: blue } /* 状态AND */
 QCheckBox:hover, QCheckBox:checked { color: white } /* 状态OR */
@@ -287,17 +329,42 @@ QCheckBox:hover, QCheckBox:checked { color: white } /* 状态OR */
 
 ### Cascading 层叠
 
-* 子对象会继承父对象的qss
+* 子对象会继承父对象的qss，并按self、parent、gradparent……的顺序融合
+  
+  ```cpp
+  // QLineEdit有边框
+  comboBox->setStyleSheet("QComboBox { border: 1px; } \
+                          QLineEdit { border: 1px;}");
+  ```
 
 * 子对象设置qss后，优先用子对象的qss，不管qss语法优先级是怎样的
+  
+  ```cpp
+  // QLineEdit有边框
+  comboBox->setStyleSheet("QComboBox { border: 1px; } \
+                          QLineEdit { border: 1px; }");
+  // QLineEdit重设后无边框
+  comboBox->lineEdit()->setStyleSheet("QLineEdit { border: none; }");
+  ```
 
 ### Inheritance 继承
 
 * css子部件会继承父对象的font和color，但qss不会，必须直接指定
+  
+  例如在QComboBox中指定了QComboBox的边框，不会影响里面QLineEdit的边框：
+  
+  ```cpp
+  // QLineEdit依然没有边框
+  comboBox->setStyleSheet("QComboBox { border: 1px; }");
+  
+  // QLineEdit有边框
+  comboBox->setStyleSheet("QComboBox { border: 1px; } \
+                          QLineEdit { border: 1px;}");
+  ```
 
 * setFont()和setPalette()会传播到子部件
 
-* 设置子部件字体和颜色传播：[QCoreApplication](../qtcore/qcoreapplication.html)::setAttribute([Qt](../qtcore/qt.html)::AA_UseStyleSheetPropagationInWidgetStyles, true);
+* 设置子部件字体和颜色传播：QCoreApplication::setAttribute(Qt::AA_UseStyleSheetPropagationInWidgetStyles, true);
 
 ### 详解
 
