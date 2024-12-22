@@ -212,6 +212,24 @@ void QCoreApplication::processEvents(QEventLoop::ProcessEventsFlags flags = QEve
 
 - 当一个窗口内的某个控件隐藏时，其他同级（在同一个layout里）的控件会自动占有空出的空间，整个窗口的大小是不会变的。如果想要整个窗口改变大小适应控件显隐造成的大小改变，可以调用**adjustSize()** 函数，该函数会递归调整子窗口，适应各自内部的内容。
 
+## QTreeView
+
+* 获取兄弟节点
+  
+  ```cpp
+  QModelIndex 
+  QAbstractItemModel::sibling(int row, int column, 
+                              const QModelIndex & index)
+  QModelIndex 
+  QModelIndex::sibling(int row, int column) const
+  ```
+
+* 获取不可见根节点
+  
+  ```cpp
+  QStandardItem * QStandardItemModel::invisibleRootItem()
+  ```
+
 ## Qt Style Sheets（qss）
 
 Qt参考文档 （Qt Assistance）搜索以下关键词即可。
