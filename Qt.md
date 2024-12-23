@@ -258,6 +258,48 @@ bool MyFileSystemModel::hasChildren(const QModelIndex& parent) const
 QString::number(value, 'f', QLocale::FloatingPointShortest)
 ```
 
+## QThread
+
+```plantuml
+@startuml
+class QThread
+{
+    +bool isRunning()
+    +bool isFinished()
+    +void start(QThread::Priority priority = InheritPriority)
+    +void quit()
+    +void exit()
+    +void terminate()
+    +bool wait(QDeadlineTimer deadline = QDeadlineTimer::Forever)
+    +bool wait(unsigned int time)
+}
+note left of QThread::quit
+等价于exit(0)
+end note
+note left of QThread::exit
+告诉线程的事件循环以给定值返回退出
+如果线程没有事件循环，则什么也不做
+end note
+note left of QThread::terminate
+终止线程，线程什么时候终止由操作系统决定，
+调用后要再调用wait()等待线程实际退出。
+非必要不要用该函数，因为线程可能在任意时刻结束，
+导致线程的资源无法回收。
+end note
+
+
+@enduml
+```
+
+### QMutex QMutexLocker
+
+```cpp
+QMutex m;
+QMutexLocker locker(m);
+locker.unlock();
+locker.relock();
+```
+
 ## QTextDocument
 
 在QTextDocument中使用html时，字体颜色只能html中用color属性指定，用QTextCuror的QTextCharFormat是无效的。
