@@ -352,6 +352,24 @@ Note: On Windows, this will work only for frameless or full-screen windows.
 
 The WindowFlags type is a typedef for [QFlags](qflags.html)<WindowType>. It stores an OR combination of WindowType values.
 
+## QTreeView
+
+* 获取兄弟节点
+  
+  ```cpp
+  QModelIndex 
+  QAbstractItemModel::sibling(int row, int column, 
+                              const QModelIndex & index)
+  QModelIndex 
+  QModelIndex::sibling(int row, int column) const
+  ```
+
+* 获取不可见根节点
+  
+  ```cpp
+  QStandardItem * QStandardItemModel::invisibleRootItem()
+  ```
+
 ## Qt Style Sheets（qss）
 
 Qt参考文档 （Qt Assistance）搜索以下关键词即可。
@@ -403,16 +421,17 @@ QPushButton, QLineEdit, QComboBox { color: red }
 
 ### Selector Types 选择器
 
-| selector                    | explanation     |
-| --------------------------- | --------------- |
-| *                           | 全选              |
-| QPushButton                 | 按类型             |
-| QPushButton\[flat="false"\] | 按属性             |
-| .QPushButton                | 按类型，但只包括自己，孩子不选 |
-| QPushButton#okButton        | 按名称             |
-| QDialog QPushButton         | 孩子、孙子。。。类       |
-| QDialog *                   | 所有类型的孩子、孙子。。。类  |
-| QDialog > QPushButton       | 直接孩子类           |
+| selector   | example                     | explanation     |
+| ---------- | --------------------------- | --------------- |
+| Universal  | *                           | 全选              |
+| Type       | QPushButton                 | 按类型，含子类         |
+| Property   | QPushButton\[flat="false"\] | 按属性             |
+| Class      | .QPushButton                | 按类型，但只包含自己，不含子类 |
+| ID         | QPushButton#okButton        | 按名称             |
+| ID         | #okButton                   | 按名称             |
+| Descendant | QDialog QPushButton         | 孩子、孙子。。。对象      |
+| Descendant | QDialog *                   | 所有类型的孩子、孙子。。。对象 |
+| Child      | QDialog > QPushButton       | 直接孩子对象          |
 
 ### Sub-Controls 子控制器
 
@@ -510,6 +529,20 @@ QCheckBox:hover, QCheckBox:checked { color: white } /* 状态OR */
   ::tear
   
   ::scroller
+
+### qss中的长度单位
+
+qss中如果不指定单位的话，早期版本大多数默认为px，最好自己指定。
+
+* px: pixels
+
+* pt: the size of one point (i.e., 1/72 of an inch)
+
+* em: the size relative to the font size of the element (e.g., 2em means 2 times the size of the font)
+
+* ex: the x-height of the font (i.e., the height of 'x')
+
+Qt中font只支持pt和px，而其他的只支持px，em或ex。
 
 ## 文件系统操作和文件读写
 
