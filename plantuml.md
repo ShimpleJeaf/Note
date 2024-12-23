@@ -4,6 +4,30 @@
 
 单引号'开头
 
+# 线框图 Salt
+
+| Symbol | Result    |
+| ------ | --------- |
+| #      | 显示所有垂直水平线 |
+| !      | 显示所有垂直线   |
+| -      | 显示所有水平线   |
+| +      | 显示外框线     |
+
+```plantuml
+@startsalt
+{+
+    Just plain text
+    [This is my button]
+    () Unchecked radio
+    (X) Checked radio
+    [] Unchecked box
+    [X] Checked box
+    "Enter text here "
+    ^This is a droplist^
+}
+@endsalt
+```
+
 # 组件图
 
 ## 组件
