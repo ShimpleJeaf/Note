@@ -272,6 +272,8 @@ class QThread
     +void terminate()
     +bool wait(QDeadlineTimer deadline = QDeadlineTimer::Forever)
     +bool wait(unsigned int time)
+    +void requestInterruption()
+    +bool isInterruptionRequested() const
 }
 note left of QThread::quit
 等价于exit(0)
@@ -286,7 +288,10 @@ note left of QThread::terminate
 非必要不要用该函数，因为线程可能在任意时刻结束，
 导致线程的资源无法回收。
 end note
-
+note left of QThread::requestInterruption
+QThread自带的停止标志设置/获取函数
+自己在run()函数中查询该标志，以适时地停止线程处理
+end note
 
 @enduml
 ```
@@ -298,6 +303,34 @@ QMutex m;
 QMutexLocker locker(m);
 locker.unlock();
 locker.relock();
+```
+
+## QEventLoop
+
+事件循环调用exec()后，实际上就是在原地开了一个死循环对Qt事件进行处理，而不执行后面的代码。
+
+exec()的默认参数是AllEvents，即处理所有事件，这意味着用户依然可以操作ui，如果exec()执行在了ui的处理过程中（如ui初始化）， 这可能导致程序崩溃。例如，点击a会删除b，而在b的构造中调用了exec()，如果在b的exec()时，用户点击了a，将会导致删除b，而此时b还没有完成构造，最终崩溃。
+
+遇到这种情况，就要使用exec(ExcludeUserInputEvents)不处理用户输入。
+
+exec()的可选参数如下：
+
+后三个可以用按位或操作进行复数指定
+
+| 参数                     | 描述                                                                |
+| ---------------------- | ----------------------------------------------------------------- |
+| AllEvents              | 所有事件都会被处理，对DeferredDelete事件做了特殊处理，回到deleteLater()被调用的事件循环才会执行删除操作 |
+| ExcludeUserInputEvents | 不处理用户输入事件，比如鼠标和键盘操作                                               |
+| ExcludeSocketNotifiers | 不处理socket的处理通知                                                    |
+| WaitForMoreEvents      | 在没有事件需要处理时等待                                                      |
+
+QEventLoop不仅可以用来阻塞代码，还可以在耗时处理中手动刷新ui，避免卡顿
+
+可以在耗时操作中插入以下语句，除了指定flag，还可以指定最大执行时间
+
+```cpp
+QApplication::processEvent(QEventLoop::ProcessEventsFlags flags = AllEvents)
+QApplication::processEvents(QEventLoop::ProcessEventsFlags flags, int maxTime)
 ```
 
 ## QTextDocument
