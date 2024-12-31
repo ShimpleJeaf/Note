@@ -8,6 +8,8 @@
 
 * utf8，兼容ascii码
   
+  * 每个字符1至4个字节
+  
   | Binary   | Hex        | Comments                                                                  |
   | -------- | ---------- | ------------------------------------------------------------------------- |
   | 0xxxxxxx | 0x00..0x7F | Only byte of a 1-byte character encoding<br>**单字节字符**                     |
@@ -16,6 +18,8 @@
   | 1110xxxx | 0xE0..0xEF | First byte of a 3-byte character encoding<br>**三字节字符的首字节**                |
   | 11110xxx | 0xF0..0xF7 | First byte of a 4-byte character encoding<br>**四字节字符的首字节**                |
 
+* utf16
+  
+  * 每个字符2或4个字节
+
 # QTextCodec 编码转换类
-
-

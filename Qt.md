@@ -258,6 +258,69 @@ bool MyFileSystemModel::hasChildren(const QModelIndex& parent) const
 QString::number(value, 'f', QLocale::FloatingPointShortest)
 ```
 
+## QIcon
+
+```mermaid
+classDiagram
+class QIconEngine {
+    +virtual void paint(QPainter *painter, const QRect &rect, QIcon::Mode mode, QIcon::State state)=0
+}
+class QPixmapIconEngine
+class QAbstractFileIconEngine
+class QIconLoaderEngine
+
+
+QIconEngine <|-- QPixmapIconEngine
+QPixmapIconEngine <|-- QAbstractFileIconEngine
+QIconEngine <|-- QIconLoaderEngine
+```
+
+* QIcon::addFile时传入的大小，是用于绘制时匹配最合适的图片，大致流程如下：
+  
+  * widget要画一个rect大小的图标
+  
+  * widget::paint
+  
+  * QIconEngine::paint(rect)
+    
+    * QIconEngine::scaledPixmap(rect)
+      
+      * QIconEngine::bestMatch(rect) // 用目标大小去匹配最优的pixmap
+      
+      * 对找到的pixmap进行缩放
+    
+    * painter->drawPixmap(scaledPixmap)
+
+* QIcon有paint函数，可以直接绘制
+  
+  virtual void paint(QPainter *painter, const QRect &rect, QIcon::Mode mode, QIcon::State state) = 0;
+  
+  该函数会对pixmap进行缩放（QIconEngine::scaledPixmap(size, mode, state)），缩放到rect的大小
+  
+  * 一般用Icon的类都会有setIconSize()函数，最终图标会缩放到该大小。如QTreeView等各种view。
+  
+  * 例外是QMenu。没有setIconSize()函数，图标大小最大是16x16。解决办法时重写QCommonStyle类
+    
+    ```cpp
+    class MenuIconStyle : public QCommonStyle
+    {
+    public:
+        virtual int pixelMetric(PixelMetric metric, const QStyleOption* option, const QWidget* widget) const
+        {
+            int s = QCommonStyle::pixelMetric(metric, option, widget);
+            if (metric == QStyle::PM_SmallIconSize) {
+                s = _size;
+            }
+        }
+    private:
+        int _size = 24;
+    };
+    //
+    // 自定义QMenu的构造：
+    MenuIconStyle menuStyle = new MenuIconStyle ();
+    menu->setStyle(menuStyle);
+    ```
+
 ## QThread
 
 ```plantuml
