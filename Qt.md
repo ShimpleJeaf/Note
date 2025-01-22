@@ -533,7 +533,11 @@ flowchart LR
 
 **默认相邻控件的边框不会互相影响，而嵌套的QWidget控件边框会互相影响**
 
-* setContentsMargin()并不是设置Box Model的margin，而是设置layout的margin，是这是两个不一样的东西。Box Model的margin要在qss中用margin属性设置
+* QWidget的contensMargin属性包括margin、border和padding，当改变三者的宽度时，该属性值就会变化
+  
+  QLayout的contensMargin的属性只是layout的边距
+  
+  setContentsMargin()并不是设置Box Model的margin，而是设置margin、padding和border的总和，但是并不改变三者的值。Box Model的margin要在qss中用margin属性设置
 
 * 外层是QWidget时
   
@@ -546,6 +550,8 @@ flowchart LR
 * 外层是QFrame时
   
   layout的大小和content矩形一样大，这时内外窗口间的边框将不会互相影响
+  
+  但是里面的圆角还是会盖住外面的直角
 
 ### The Style Sheet Syntax 语法
 
