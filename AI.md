@@ -1,3 +1,33 @@
+# 基本概念
+
+* NLP 
+  
+  Natual Language Processing
+  
+  自然语言处理
+
+* LLM 
+  
+  Large Language Model
+  
+  大语言模型
+  
+  用于自然语言处理
+
+* Embedder Model
+  
+  Embedder：嵌入
+  
+  通过将文本转换为向量表示，这些模型帮助计算机理解和处理自然语言
+
+* Speech model
+  
+  语音模型
+
+* Vector Database
+  
+  向量数据库，是一种专门用于存储和处理向量数据的数据库系统
+
 # pip
 
 * 卸载所有第三方依赖包
@@ -106,3 +136,7 @@
   ```
 
 # facefusion
+
+
+
+# Anything LLM
