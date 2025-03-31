@@ -137,6 +137,130 @@
 
 # facefusion
 
+# Hugging Face
 
+镜像站：
+
+HF-Mirror  https://hf-mirror.com/
+
+在open-webui中使用：
+
+* Windows
+  
+  set HF_ENDPOINT=https://hf-mirror.com
+
+* Linux
+  
+  export HF_ENDPOINT=https://hf-mirror.com 
 
 # Anything LLM
+
+# Ollama + open-webui
+
+## 1. Ollama
+
+https://ollama.com
+
+* 下载并安装
+
+* 在官网搜索需要的模型，模型内容里有下载的命令行
+  
+  如：
+  
+  ```batch
+  ollama run deepseek-r1:8b
+  ```
+  
+  会下载并运行该模型，后面的8b表示模型参数数量
+
+* ollama的默认端口号为11434
+
+* 命令行启动服务，方便看日志
+  
+  ```batch
+  ollama serve
+  ```
+
+* 允许外网访问
+  
+  如果需要限制端口号，改为0.0.0.0:port即可
+  
+  * Linux
+    
+    ```shell
+    # 停止服务
+    systemctl stop ollama
+    vim /etc/systemd/system/ollama.service
+    # 增加两行
+    Environment="OLLAMA_HOST=0.0.0.0"
+    Environment="OLLAMA_ORIGINS=*"
+    # 重载daemon文件 
+    systemctl daemon-reload
+    # 启动服务
+    systemctl start ollama
+    ```
+  
+  * Windows
+    
+    ```batch
+    :: 添加两个环境变量
+    OLLAMA_HOST=0.0.0.0
+    OLLAMA_ORIGINS=*
+    ```
+
+* 更改模型存放位置
+  
+  ```batch
+  :: 添加环境变量
+  OLLAMA_MODELS=D:\software\ollama\models
+  ```
+
+* 刷新环境变量
+  
+  win+R进入cmd
+  
+  echo %path%
+  
+  即可
+
+* Visual Studio插件
+  
+  LLM Copilot
+
+## 2. open-webui
+
+使用pip安装
+
+* 下载安装python11，如果有多个python版本，就不要加入到环境变量path中
+
+* 用python11建一个虚拟环境
+  
+  ```batch
+  (your driver path)\python11\python.exe -m venv venv
+  ```
+
+* 激活虚拟环境
+  
+  ```batch
+  call venv/scripts/activate.bat
+  ```
+
+* 安装open-webui
+  
+  ```batch
+  pip install open-webui
+  ```
+
+* 启动脚本
+  
+  ```batch
+  call venv/scripts/activate.bat
+  :: 设置Hugging Face的镜像站
+  set HF_ENDPOINT=https://hf-mirror.com
+  :: 启动服务
+  open-webui serve
+  ```
+
+* open-webui的默认网页地址是0.0.0.0:3000，可能无法访问可以换成localhost:3000
+
+* 
