@@ -227,7 +227,9 @@ https://ollama.com
   
   LLM Copilot
 
-## 2. open-webui
+## 2 open-webui
+
+## 2.1 安装
 
 使用pip安装
 
@@ -263,4 +265,16 @@ https://ollama.com
 
 * open-webui的默认网页地址是0.0.0.0:3000，可能无法访问可以换成localhost:3000
 
-* 
+### 2.2 使用函数
+
+官网：[Open WebUI](https://openwebui.com/)
+
+在官网主页可以查找下载模型、函数、提示词、工具。
+
+* 限制输入Context Length
+  
+  deepseek模型默认的num_ctx比较小，且不支持k-shift自动滑窗，输入context长度过长模型就会崩溃，可以用以下函数进行限制。open-webui输入的默认长度非常长，具体是多少不知道，最少应该有20个对话历史。
+  
+  函数地址：[Context Length Filter (tokens & turns) Function | Open WebUI Community](https://openwebui.com/f/keke/context_length_filter)
+  
+  下载后在函数页面导入，全局开启，或者在主页的工作空间中新建一个模型，在模型中加入该函数过滤器。
