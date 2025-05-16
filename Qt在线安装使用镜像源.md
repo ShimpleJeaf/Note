@@ -32,6 +32,9 @@ MaintenanceTool.exe --mirror https://mirrors.tuna.tsinghua.edu.cn/qt
 ![在这里插入图片描述](img/qt_install_online_2.png)
 
 国内镜像（CN）
-https://mirrors.ustc.edu.cn/qtproject
-https://mirrors.sau.edu.cn/qt
-https://mirrors.sjtug.sjtu.edu.cn/qt
+
+* https://mirrors.ustc.edu.cn/qtproject
+
+* https://mirrors.sau.edu.cn/qt
+
+* https://mirrors.sjtug.sjtu.edu.cn/qt

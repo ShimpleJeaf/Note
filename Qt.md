@@ -69,15 +69,17 @@ Options:
 1. 生成ts文件
    
    **QtCreator**
-* 在pro中加上TRANSLATIONS设置，如TRANSLATIONS += trans_zh_CN.ts，可以设置多个，每个对应生成的ts文件名
-
-* 并在Qt Creator中点击菜单栏-工具-外部-Qt语言家-更新翻译，默认在pro目录生成对应的ts文件
-  
+   
+   * 在pro中加上TRANSLATIONS设置，如TRANSLATIONS += trans_zh_CN.ts，可以设置多个，每个对应生成的ts文件名
+   
+   * 并在Qt Creator中点击菜单栏-工具-外部-Qt语言家-更新翻译，默认在pro目录生成对应的ts文件
+   
    **VS**
+   
+   * 扩展-Qt VS Tools-Create New Translation File
+   
+   * 右键新生成的ts文件，选择lupdate
 
-* 扩展-Qt VS Tools-Create New Translation File
-
-* 右键新生成的ts文件，选择lupdate
 2. 翻译ts文件
    
    使用Qt目录下的Linguist软件或文本编辑器翻译ts文件
@@ -254,8 +256,6 @@ bool MyFileSystemModel::hasChildren(const QModelIndex& parent) const
 
 ## QAbstractProxyModel代理模型
 
-
-
 ## 数字转字符串去除尾数0
 
 ```cpp
@@ -372,7 +372,7 @@ locker.unlock();
 locker.relock();
 ```
 
-## QEventLoop
+## 事件循环QEventLoop
 
 事件循环调用exec()后，实际上就是在原地开了一个死循环对Qt事件进行处理，而不执行后面的代码。
 
@@ -399,6 +399,22 @@ QEventLoop不仅可以用来阻塞代码，还可以在耗时处理中手动刷�
 QApplication::processEvent(QEventLoop::ProcessEventsFlags flags = AllEvents)
 QApplication::processEvents(QEventLoop::ProcessEventsFlags flags, int maxTime)
 ```
+
+## 事件QEvent
+
+### sendEvent和postEvent
+
+* sendEvent会立即去处理该事件，是同步的，而postEvent是将一个事件加入到事件队列中，在到达主循环的事件处理阶段才会同一处理，是异步的。
+
+* postEvent是会按事件的优先级进行排序的。
+
+* postEvent的event必须在堆上构造，由事件处理时进行释放，原因就是它是异步的。而sendEvent可以用栈上的临时QEvent对象。
+
+## resize和move
+
+* 调用resize()时，会更新geometry，因此之后调用size()获取的是新的大小。然后send一个ResizeEvent。
+
+* move()时也一样，都是更新geometry，再send一个MoveEvent。
 
 ## QTextDocument
 
@@ -520,7 +536,7 @@ Qt Style Sheets：介绍
 
 Qt Style Sheets Reference：详细参考文档
 
-### The Box Model
+### 1. The Box Model
 
 ```mermaid
 flowchart LR
@@ -557,7 +573,7 @@ flowchart LR
   
   但是里面的圆角还是会盖住外面的直角
 
-### The Style Sheet Syntax 语法
+### 2. The Style Sheet Syntax 语法
 
 ```css
 QPushButton { color: red } /*最后一个可以不加分号*/
@@ -567,7 +583,7 @@ QPushButton { color: red; backgroud-color: white }
 QPushButton, QLineEdit, QComboBox { color: red }
 ```
 
-### Selector Types 选择器
+### 3. Selector Types 选择器
 
 | selector   | example                     | explanation     |
 | ---------- | --------------------------- | --------------- |
@@ -581,13 +597,13 @@ QPushButton, QLineEdit, QComboBox { color: red }
 | Descendant | QDialog *                   | 所有类型的孩子、孙子。。。对象 |
 | Child      | QDialog > QPushButton       | 直接孩子对象          |
 
-### Sub-Controls 子控制器
+### 4. Sub-Controls 子控制器
 
 ```css
 QComboxBox::drop-down { image: url(dropdown.png) }
 ```
 
-### Pseudo-States 状态
+### 5. Pseudo-States 状态
 
 ```css
 QPushButton:hover { color: white }
@@ -595,7 +611,7 @@ QPushButton:hover:!pressed { color: blue } /* 状态AND */
 QCheckBox:hover, QCheckBox:checked { color: white } /* 状态OR */
 ```
 
-### Conflict Resolution 冲突解决
+### 6. Conflict Resolution 冲突解决
 
 * 更具体的优先
 
@@ -623,7 +639,7 @@ QCheckBox:hover, QCheckBox:checked { color: white } /* 状态OR */
   |     | LI.red.level     | /* a=0 b=2 c=1 -> specificity =c 21 */ |
   | 最高级 | #x34y            | /* a=1 b=0 c=0 -> specificity = 100 */ |
 
-### Cascading 层叠
+### 7. Cascading 层叠
 
 * 子对象会继承父对象的qss，并按self、parent、gradparent……的顺序融合
   
@@ -643,7 +659,7 @@ QCheckBox:hover, QCheckBox:checked { color: white } /* 状态OR */
   comboBox->lineEdit()->setStyleSheet("QLineEdit { border: none; }");
   ```
 
-### Inheritance 继承
+### 8. Inheritance 继承
 
 * css子部件会继承父对象的font和color，但qss不会，必须直接指定
   
@@ -662,7 +678,7 @@ QCheckBox:hover, QCheckBox:checked { color: white } /* 状态OR */
 
 * 设置子部件字体和颜色传播：QCoreApplication::setAttribute(Qt::AA_UseStyleSheetPropagationInWidgetStyles, true);
 
-### 详解
+### 9. 详解
 
 * QTabWidget
   
@@ -678,7 +694,7 @@ QCheckBox:hover, QCheckBox:checked { color: white } /* 状态OR */
   
   ::scroller
 
-### qss中的长度单位
+### 10. qss中的长度单位
 
 qss中如果不指定单位的话，早期版本大多数默认为px，最好自己指定。
 
