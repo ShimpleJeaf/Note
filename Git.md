@@ -33,3 +33,60 @@ git gc 是指“垃圾回收（garbage collection）”，用于清理和优化 
 `git fetch`是将远程主机的最新内容拉到本地，用户在检查了以后决定是否合并到工作本机分支中。
 
 而`git pull` 则是将远程主机的最新内容拉下来后直接合并，即：`git pull = git fetch + git merge`，这样可能会产生冲突，需要手动解决。
+
+# branch 分支
+
+```
+git branch 列出本地已经存在的分支，并且当前分支会用*标记
+git branch -r 查看远程版本库的分支列表
+git branch -a 查看所有分支列表（包括本地和远程，remotes/开头的表示远程分支）
+git branch -v 查看一个分支的最后一次提交
+git branch --merged  查看哪些分支已经合并到当前分支
+git branch --no-merged 查看所有未合并工作的分支
+```
+
+* 创建分支
+  
+  git branch branchname
+
+* 切换分支
+  
+  git checkout branchname
+
+* 创建并切换分支
+  
+  git checkout -b branchname
+
+* 删除分支
+  
+  git branch -d branchname
+
+* 合并分支
+  
+  先将分支commit
+  
+  切换到master分支
+  
+  git merge branchname
+
+# stash 保存临时修改，不提交
+
+在修改分支到一半时，如果要切换到主分支进行修改，则可以用该命令暂时保存
+
+* 保存临时修改
+  
+  git stash
+  
+  或
+  
+  git stash save “修改信息”
+
+* 列出保存的临时修改
+  
+  git stash list
+
+* 应用临时修改，stash@{0}是修改的编号
+  
+  git stash apply stash@{0}
+  
+  
