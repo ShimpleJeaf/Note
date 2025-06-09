@@ -20,6 +20,14 @@
 
 所有提交的操作记录，如果不小心回滚了代码，可以在这里找回
 
+修改保存时间：
+
+```   
+git reflog expire --expire-unreachable=180.days --all
+```
+
+
+
 # gc
 
 git gc 是指“垃圾回收（garbage collection）”，用于清理和优化 Git 仓库中的垃圾对象。通过执行 git gc，Git 会将不再需要的对象从仓库中清理出去，以保持仓库的整洁和性能的良好表现。
@@ -69,6 +77,16 @@ git branch --no-merged 查看所有未合并工作的分支
   
   git merge branchname
 
+# rebase
+
+将master的更改合并到分支里，即改变分支的基础（base）节点，也就是说分支将会是在master的新版本的基础上修改的。
+
+用法：git rebase master
+
+中途合并可以保证和master尽量同步，防止大量开发分支后和master合并困难。
+
+最好用merge替代，记录更完整清晰
+
 # stash 保存临时修改，不提交
 
 在修改分支到一半时，如果要切换到主分支进行修改，则可以用该命令暂时保存
@@ -85,8 +103,10 @@ git branch --no-merged 查看所有未合并工作的分支
   
   git stash list
 
-* 应用临时修改，stash@{0}是修改的编号
+* 应用临时修改，stash@{0}是修改的标识
   
   git stash apply stash@{0}
   
+  也可以直接用编号
   
+  git stash apply 0
