@@ -22,11 +22,15 @@
 
 修改保存时间：
 
-```   
+```bash
 git reflog expire --expire-unreachable=180.days --all
 ```
 
+# count-objects
 
+* -v 详细信息
+
+* -H human-readable大小表示
 
 # gc
 
@@ -44,7 +48,7 @@ git gc 是指“垃圾回收（garbage collection）”，用于清理和优化 
 
 # branch 分支
 
-```
+```bash
 git branch 列出本地已经存在的分支，并且当前分支会用*标记
 git branch -r 查看远程版本库的分支列表
 git branch -a 查看所有分支列表（包括本地和远程，remotes/开头的表示远程分支）
@@ -55,19 +59,27 @@ git branch --no-merged 查看所有未合并工作的分支
 
 * 创建分支
   
+  ```bash
   git branch branchname
+  ```
 
 * 切换分支
   
+  ```bash
   git checkout branchname
+  ```
 
 * 创建并切换分支
   
+  ```bash
   git checkout -b branchname
+  ```
 
 * 删除分支
   
+  ```bash
   git branch -d branchname
+  ```
 
 * 合并分支
   
@@ -75,13 +87,29 @@ git branch --no-merged 查看所有未合并工作的分支
   
   切换到master分支
   
+  ```bash
   git merge branchname
+  ```
+
+* 删除远程分支
+  
+  ```bash
+  git push remote_name -d remote_branchname
+  # 例如：
+  git push origin -d scene
+  ```
+  
+  
 
 # rebase
 
 将master的更改合并到分支里，即改变分支的基础（base）节点，也就是说分支将会是在master的新版本的基础上修改的。
 
-用法：git rebase master
+用法：
+
+```bash
+git rebase master
+```
 
 中途合并可以保证和master尽量同步，防止大量开发分支后和master合并困难。
 
@@ -101,12 +129,18 @@ git branch --no-merged 查看所有未合并工作的分支
 
 * 列出保存的临时修改
   
+  ```bash
   git stash list
+  ```
 
 * 应用临时修改，stash@{0}是修改的标识
   
+  ```bash
   git stash apply stash@{0}
+  ```
   
   也可以直接用编号
   
+  ```bash
   git stash apply 0
+  ```
