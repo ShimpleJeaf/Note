@@ -67,6 +67,8 @@
     [download.pytorch.org/whl/torch](https://download.pytorch.org/whl/torch)
     
     pip install 安装包名
+  
+  **注意**：要先卸载旧的版本，不然新版本安装不上，而且安装过程不会报错，很容易注意不到。安装完后用pip list查看安装后的版本是否正确
 
 * cuda下载链接
   
