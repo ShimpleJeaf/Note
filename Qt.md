@@ -1,5 +1,28 @@
 # Qt
 
+## Ubuntu
+
+### 安装Qt
+
+```bash
+sudo apt install qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools qdbus-qt5 libqt5websocket5-dev libqt5multimedia* qtmultimedia5-*
+
+sudo apt install qtcreator
+
+sudo apt install qt5*
+```
+
+### 编译
+
+新建一个文件夹build
+
+进入build文件夹
+
+```bash
+qmake 
+make
+```
+
 ## 用windeployqt工具对Qt程序进行打包
 
 **Windeployqt**
@@ -409,6 +432,36 @@ QApplication::processEvents(QEventLoop::ProcessEventsFlags flags, int maxTime)
 * postEvent是会按事件的优先级进行排序的。
 
 * postEvent的event必须在堆上构造，由事件处理时进行释放，原因就是它是异步的。而sendEvent可以用栈上的临时QEvent对象。
+
+### accept和ignore
+
+accept：接受事件，事件不会继续向父窗口传递，默认
+
+ignore：忽略事件，事件会继续向父窗口传递
+
+在复写closeEvent时，如果调用ignore，窗口将不会关闭，如果什么都不掉用或只调用accept，窗口会关闭。
+
+### QMouseEvent
+
+* button()
+  
+  产生该事件的按键
+  
+  move时始终为NoButton
+
+* buttons()
+  
+  产生事件时鼠标按键的状态。
+  
+  move时，所有按键为按下状态；按下和双击时包括产生事件的按键；release时不包括产生事件的按键。
+
+* pos()
+  
+  鼠标位置，widget坐标系
+
+* globalPos()
+  
+  鼠标位置，全局坐标系
 
 ## resize和move
 
@@ -820,3 +873,46 @@ QTextStream(QIODevice* device)
 支持<<和>>操作
 
 ### 读写二进制文件 QDataStream
+
+## 3D
+
+* Qt3DCore
+
+* Qt3DInput
+
+* Qt3DLogic
+
+以下模块仍处于开发阶段，但作为技术预览提供
+
+* Qt3DRender
+
+* Qt3DAnimation
+
+* Qt3DExtras
+
+```mermaid
+classDiagram
+    QObject <|-- QNode
+
+    QNode <|-- QEntity
+    QNode <|-- QComponent
+    QNode <|-- QAbstractTexture
+    QNode <|-- QShaderImage
+    QNode <|-- QShaderProgram
+    QNode <|-- QPaintedTextureImage
+    QNode <|-- QTextureImage
+```
+
+```mermaid
+classDiagram
+    QEntity <|-- QAbstractCameraController
+    QEntity <|-- QSkyboxEntity
+    QEntity <|-- QText2DEntity
+    QEntity <|-- QCamera
+    
+    QAbstractCameraController <|-- QFirstPersonCameraController
+    QAbstractCameraController <|-- QOrbitCameraController
+
+    
+    
+```
