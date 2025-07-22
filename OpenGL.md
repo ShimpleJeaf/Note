@@ -240,6 +240,10 @@ $V_{clip}=M_{projection} \cdot M_{view} \cdot M_{model} \cdot V_{local}$
   
   可以认为是高度图
 
+### 纹理尺寸要求
+
+纹理的长宽必须为2的次幂，如2、4、8、16、32等。
+
 ## obj的材质mtl
 
 ```mtl
@@ -287,6 +291,8 @@ bump texture_bump.jpg               指定了凹凸纹理映射
 
 ## 冯氏光照模型
 
+冯氏光照模型包含以下三种光照分量
+
 * 环境光
   
   float ambientStrenth = 0.1
@@ -313,7 +319,57 @@ bump texture_bump.jpg               指定了凹凸纹理映射
   
   float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32); // 32是反射强度
   
-  vec3 specularColor = specularStrength * spec * lightColor;
+  vec3 specularColor = specularStrength * spec * lightColor * objectColor;
+
+## 材质
+
+将冯氏光照模型中三种光照中的objectColor换成相对应的颜色分量，就可以定义得到材质的定义。
+
+```glsl
+struct Material {
+    vec3 ambient;    // 环境光颜色
+    vec3 diffuse;    // 漫反射颜色
+    vec3 specular;   // 镜面反射颜色
+    float shininess; // 反光度，影响高光的半径
+}; 
+
+
+void main()
+{    
+    // 环境光
+    vec3 ambient = lightColor * material.ambient;
+
+    // 漫反射 
+    vec3 norm = normalize(Normal);
+    vec3 lightDir = normalize(lightPos - FragPos);
+    float diff = max(dot(norm, lightDir), 0.0);
+    vec3 diffuse = lightColor * (diff * material.diffuse);
+
+    // 镜面光
+    vec3 viewDir = normalize(viewPos - FragPos);
+    vec3 reflectDir = reflect(-lightDir, norm);  
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    vec3 specular = lightColor * (spec * material.specular);  
+
+    vec3 result = ambient + diffuse + specular;
+    FragColor = vec4(result, 1.0);
+}
+```
+
+## 漫反射贴图和镜面光贴图
+
+冯氏光照模型中的三种光颜色除了是材质中定义的固定值外，还可以用贴图定义每个片段的颜色。
+
+通常环境颜色和漫反射颜色是一样的，所以一般环境光贴图和漫反射贴图是一样的。
+
+使用方法如下：
+
+```glsl
+vec3 ambient  = light.ambient  * vec3(texture(material.diffuse, TexCoords));
+vec3 diffuse  = light.diffuse  * diff * vec3(texture(material.diffuse, TexCoords));  
+vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
+FragColor = vec4(ambient + diffuse + specular, 1.0);
+```
 
 ## 光源
 

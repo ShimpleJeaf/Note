@@ -285,6 +285,26 @@ bool MyFileSystemModel::hasChildren(const QModelIndex& parent) const
 QString::number(value, 'f', QLocale::FloatingPointShortest)
 ```
 
+## 浮点数比较 qFuzzyCompare qFuzzyIsNull
+
+Qt提供的浮点数比较函数，两个函数均有double重载：
+
+* 判断两个数是否相等
+  
+  qFuzzyCompare(float a, float b)
+
+* 判断数是否为0
+  
+  qFuzzyCompare(float a)
+
+注意，qFuzzyCompare必须保证两个数均不为0，只有一个数为0时比较会出错，其实现如下：
+
+```cpp
+return (qAbs(p1 - p2) * 100000.f <= qMin(qAbs(p1), qAbs(p2)));
+```
+
+如果有一个数为0，后面部分将为0，只要另一个数不是0，不管多小，都不会比后面小，将会返回false。
+
 ## QIcon
 
 ```mermaid
@@ -909,7 +929,7 @@ classDiagram
     QEntity <|-- QSkyboxEntity
     QEntity <|-- QText2DEntity
     QEntity <|-- QCamera
-    
+
     QAbstractCameraController <|-- QFirstPersonCameraController
     QAbstractCameraController <|-- QOrbitCameraController
 

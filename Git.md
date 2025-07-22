@@ -98,8 +98,6 @@ git branch --no-merged 查看所有未合并工作的分支
   # 例如：
   git push origin -d scene
   ```
-  
-  
 
 # rebase
 
@@ -119,13 +117,35 @@ git rebase master
 
 在修改分支到一半时，如果要切换到主分支进行修改，则可以用该命令暂时保存
 
+**默认不会保存untracked和ignored文件**
+
+**不会保存commit，切分支的话commit由分支系统保存**
+
 * 保存临时修改
+  
+  不加子命令时使用push
   
   git stash
   
   或
   
-  git stash save “修改信息”
+  git stash push ["修改信息"]
+  
+  git stash save [“修改信息”]
+  
+  * -u | --include-untracked 
+    
+    包括untracked文件
+  
+  * -a | --all
+    
+    包括untracked、ignored文件
+
+* 删除stash
+  
+  ```bash
+  git stash drop 0
+  ```
 
 * 列出保存的临时修改
   
@@ -143,4 +163,18 @@ git rebase master
   
   ```bash
   git stash apply 0
+  ```
+
+* 弹出临时修改
+  
+  应用临时修改，并从stash list里删除
+  
+  ```bash
+  git stash pop 0
+  ```
+
+* 显示更改信息，会显示简略的文件变化信息
+  
+  ```bash
+  git stash show 0
   ```
