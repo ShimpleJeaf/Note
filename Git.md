@@ -2,6 +2,30 @@
 
 需要在git中设置代理
 
+# clone 克隆
+
+基本克隆
+
+```bash
+git clone <url>
+```
+
+包含子模块，既引用的其他仓库
+
+```bash
+git clone --recursive <url>
+```
+
+# submodule 子模块
+
+如果克隆的时候没有包含子模块，cmake会报错:git submodule ... not found
+
+可用以下命令加入
+
+```bash
+git submodule update --init --recursive
+```
+
 # revert 还原
 
 **还原**用于撤销某个特定提交的更改，而不更改提交历史。与重置不同的是，**还原不会删除提交记录**，而是创建一个新的提交，表示撤销了某个特定的更改。它在协作开发中更安全，因为不会更改历史记录。
