@@ -2,6 +2,30 @@
 
 需要在git中设置代理
 
+# clone 克隆
+
+基本克隆
+
+```bash
+git clone <url>
+```
+
+包含子模块，既引用的其他仓库
+
+```bash
+git clone --recursive <url>
+```
+
+# submodule 子模块
+
+如果克隆的时候没有包含子模块，cmake会报错:git submodule ... not found
+
+可用以下命令加入
+
+```bash
+git submodule update --init --recursive
+```
+
 # mv 更名移动 文件、文件夹
 
 git mv可以更名文件、移动文件、更名文件夹、移动文件夹
