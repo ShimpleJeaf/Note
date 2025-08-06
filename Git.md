@@ -1,6 +1,17 @@
-# vpn
+# vpn 代理
 
 需要在git中设置代理
+
+# mv 更名移动 文件、文件夹
+
+git mv可以更名文件、移动文件、更名文件夹、移动文件夹
+
+```bash
+git mv srcFile dstFile
+git mv srcFile1 srcFile2 ... dstDir
+# 注意，当dstDir存在时，为移动，不存在时为更名
+git mv srcDir dstDir 
+```
 
 # revert 还原
 
