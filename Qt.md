@@ -489,6 +489,36 @@ ignore：忽略事件，事件会继续向父窗口传递
 
 * move()时也一样，都是更新geometry，再send一个MoveEvent。
 
+## setCursor设置鼠标样式
+
+* 该函数属于QWidget，所有QWidget的子类均可调用
+
+* QGraphicsView直接调用该函数无效，需要用viewport
+  
+  ```cpp
+  viewport()->setCursor(Qt::ArrowCursor);
+  ```
+
+* 鼠标悬浮时无效，即没有按下鼠标按键时，需要用以下函数：
+  
+  ```cpp
+  QApplication::setOverrideCursor(Qt::ArrowCursor);
+  ```
+
+  该函数内部维护了一个栈区，不要重复调用setOverrideCursor，设置一次后更改时使用：
+
+  ```cpp
+  QApplication::changeOverrideCursor(Qt::SizeHorCursor);
+  ```
+
+  恢复鼠标样式，出栈调用：
+
+  ```cpp
+  QApplication::restoreOverrideCursor();
+  ```
+
+  一般而言，每次setOverrideCursor对应一次restoreOverrideCursor
+
 ## QTextDocument
 
 在QTextDocument中使用html时，字体颜色只能html中用color属性指定，用QTextCuror的QTextCharFormat是无效的。

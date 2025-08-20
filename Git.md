@@ -164,9 +164,9 @@ git rebase master
   
   或
   
-  git stash push ["修改信息"]
+  git stash push -m ["修改信息"]
   
-  git stash save [“修改信息”]
+  git stash save -m [“修改信息”]
   
   * -u | --include-untracked 
     
