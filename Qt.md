@@ -214,6 +214,24 @@ QVariant property(QString name)
 
 Q_PROPERTY只是声明cursor是一个属性，cursor、setCursor、unsetCursor等函数依然需要自己在类内进行声明和定义。
 
+## Q_OBJECT定义在cpp中的问题
+
+通常Q_OBJECT只定义在头文件中，会使用moc生成moc_Filename.cpp，参加编译，如果在cpp中使用了Q_OBJECT，就会编译报错，找不到Q_OBJECT中的某些定义。
+
+要想在cpp中使用Q_OBJECT就一样需要moc生成的内容，vs下方法如下：
+
+1. cpp的文件类型改moc
+
+2. moc选项中的Dynamic C++ Source改为**Input File**（头文件的是Output File，意味着生成的文件会自动被编译）
+
+3. moc选项中的Output File Name要改为%\(Filename\).moc，不要和头文件生成的moc文件（**moc_%\(Filename\).cpp**）重名
+
+4. 在cpp末尾加上
+   
+   ```cpp
+   #include "Filename.moc"
+   ```
+
 ## QElapsedTimer 计算时间间隔ns
 
 ```cpp
@@ -504,19 +522,19 @@ ignore：忽略事件，事件会继续向父窗口传递
   ```cpp
   QApplication::setOverrideCursor(Qt::ArrowCursor);
   ```
-
+  
   该函数内部维护了一个栈区，不要重复调用setOverrideCursor，设置一次后更改时使用：
-
+  
   ```cpp
   QApplication::changeOverrideCursor(Qt::SizeHorCursor);
   ```
-
+  
   恢复鼠标样式，出栈调用：
-
+  
   ```cpp
   QApplication::restoreOverrideCursor();
   ```
-
+  
   一般而言，每次setOverrideCursor对应一次restoreOverrideCursor
 
 ## QTextDocument

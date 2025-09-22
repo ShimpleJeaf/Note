@@ -10,10 +10,16 @@
 git clone <url>
 ```
 
-包含子模块，既引用的其他仓库
+包含**子模块**，既引用的其他仓库
 
 ```bash
 git clone --recursive <url>
+```
+
+**断点续传**
+
+```bash
+git clone --resume <url>
 ```
 
 # submodule 子模块
@@ -49,7 +55,7 @@ git mv srcDir dstDir
 
 * --mixed    head、index更改，但是本地代码不变，重置到版本后的所有变更作为本地修改保存在工作区中
 
-* --hard    head、index、工作区代码全部回滚到指定版本
+* --hard    head、index、工作区代码全部回滚到指定版本，但是不会影响未跟踪的文件
 
 # reflog
 
@@ -62,6 +68,8 @@ git reflog expire --expire-unreachable=180.days --all
 ```
 
 # count-objects
+
+查看仓库大小
 
 * -v 详细信息
 
@@ -80,6 +88,51 @@ git gc 是指“垃圾回收（garbage collection）”，用于清理和优化 
 `git fetch`是将远程主机的最新内容拉到本地，用户在检查了以后决定是否合并到工作本机分支中。
 
 而`git pull` 则是将远程主机的最新内容拉下来后直接合并，即：`git pull = git fetch + git merge`，这样可能会产生冲突，需要手动解决。
+
+# 仓库迁移
+
+1. 将原仓库克隆到本地
+
+2. 移除原远程仓库
+   
+   ```bash
+   git remote remove origin
+   ```
+
+3. 添加新的远程仓库
+   
+   ```bash
+   git remote add origin <new_repository_url>
+   ```
+
+4. 将代码推送到新的仓库
+   
+   ```bash
+   git push -u origin master
+   ```
+
+## 记录太大，无法推送，increase http.postBuffer
+
+> unable to rewind rpc post data - try increasing http.postbuffer
+
+```bash
+git config --global http.postBuffer 8192000000
+git config http.postBuffer 8192000000
+```
+
+不能设置太大，不然会超过http协议的限制，也不行
+
+> fatal: protocol error: bad line length 8192 47.18 MiB/s
+
+* 可以分部push记录：
+  
+  先reset到开始的commit记录，再进行push
+
+* push指定的commit记录，第一次推送时不能用，所以第一次推送必须先reset
+  
+  ```bash
+  git push origin d3a34:master
+  ```
 
 # branch 分支
 
@@ -213,3 +266,21 @@ git rebase master
   ```bash
   git stash show 0
   ```
+
+# 从历史记录中删除一个文件
+
+```bash
+git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch secret.txt' --prune-empty --tag-name-filter cat -- --all
+```
+
+secret.txt将从版本记录中完全删除
+
+注意：
+
+* 这是一个耗时的操作
+
+* 文件路径是相对于git仓库根目录的
+
+* 文件路径不要以 / 开头，否则将会认为是相对git安装目录的路径
+
+* 如果是删除文件夹，在 --cache 后加 -r 递归删除
