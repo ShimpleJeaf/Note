@@ -25,3 +25,33 @@ shutdown -O -r -t 0
 CD D:
 
 执行MV.bat 即可.
+
+# 软链接（符号链接）和硬链接
+
+对软链接的删除操作不会影响被链接对象，只是删除该快捷方式
+
+而对硬链接的所有操作和对链接对象进行操作无异
+
+* 创建文件软链接
+  
+  ```batch
+  mklink Link Target
+  ```
+
+* 创建目录软链接
+  
+  ```batch
+  mklink /D Link Target
+  ```
+
+* 创建文件硬链接
+  
+  ```batch
+  mklink /H Link Target
+  ```
+
+* 创建目录硬链接
+  
+  ```batch
+  mklink /J Link Target
+  ```
