@@ -38,6 +38,10 @@
 
 # cuda tensorrt onnx
 
+* cuda和tensorrt的区别
+  
+  cuda是通用计算使用，而tensorrt是人工智能专用
+
 * pip install -r requirement.txt更新包依赖
   
   查看requirement.txt中对onnx-runtime的版本要求
@@ -100,8 +104,9 @@
   import onnxruntime
   print(onnxruntime.__version__)
   print(onnxruntime.get_device() ) # 如果得到的输出结果是GPU，所以按理说是找到了GPU的
-  ort_session = onnxruntime.InferenceSession("your_onnx_module_path.onnx", 
-      providers=['CUDAExecutionProvider']) # TensorrtExecutionProvider
+  # TensorrtExecutionProvider，注意吧your_onnx_module_path.onnx换成存在的onnx
+  # 如果要检验tensorrt，把providers参数改为TensorrtExecutionProvider即可
+  ort_session = onnxruntime.InferenceSession("your_onnx_module_path.onnx", providers=['CUDAExecutionProvider'])
   print(ort_session.get_providers()) # 回打印实际使用的设备
   ```
 
