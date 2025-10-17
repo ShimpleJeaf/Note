@@ -164,6 +164,12 @@ HF-Mirror  https://hf-mirror.com/
 https://ollama.com
 
 * 下载并安装
+  
+  指定安装目录：
+  
+  ```bash
+  OllamaSetup.exe /DIR=D:\Software\Ollama
+  ```
 
 * 在官网搜索需要的模型，模型内容里有下载的命令行
   
