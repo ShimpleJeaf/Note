@@ -287,4 +287,132 @@ clang-uml -c config.yaml
 
 config.yaml中的add_compile_flags:添加-I头文件目录选项
 
-# 
+# netplan修改ip地址
+
+## 查看网络链接方式
+
+```bash
+ls /etc/netplan
+# 该目录下的.yaml文件
+```
+
+```yaml
+# 50-cloud-init.yaml
+network:
+  version: 2
+  ethernets:
+    enp0s3:
+      critical: true
+      dhcp-identifier: "mac"
+      dhcp4: true
+```
+
+## 修改ip
+
+1. 修改netplan配置文件
+   
+   ```yaml
+   network:
+    version: 2
+    ethernet:
+      enp0s3:
+        dhcp4: no
+        addresses:
+          - 192.168.1.123/24
+        # gateway4: 192.168.1.1
+        routes:
+          - to: default
+            via: 192.168.1.1
+        nameservers:
+          addresses:
+            - 8.8.8.8
+   ```
+
+2. 应用新配置
+   
+   测试配置文件
+   
+   ```bash
+   sudo netplan try
+   ```
+   
+   ```bash
+   sudo netplan generate
+   sudo netplan apply
+   ```
+
+3. 检查生效情况
+   
+   ```bash
+   ip addr
+   ```
+
+## 临时修改ip
+
+```bash
+sudo ip addr flush dev enp0s3
+sudo ip addr add 192.168.1.123/24 dev enp0s3
+sudo ip route add default via 192.168.1.1
+```
+
+* ip addr flush是清除原有IP
+
+* 新IP会在下载重启或网卡重启时失效
+
+## 连接无线网络
+
+* 需要以下软件
+  
+  ```bash
+  sudo apt install network-manager wpasupplicant wireless-tools
+  ```
+
+* 扫描无线网卡
+  
+  ```bash
+  sudo iwlist wlol scan | grep ESSID
+  ```
+  
+  wlol是网卡名字，ip addr可查看，一般是wl开头的
+  
+  记录WIFI的名称，例如wlan0
+
+* 配置netplan配置文件
+  
+  ```yaml
+  network:
+    version: 2
+    ......
+  
+    wifis:
+      wlan0:
+      dhcp4: true
+      access-points:
+        "wifi_name1":
+          password: "mypassword"
+        "wifi_name2":
+          password: "88888888"
+  ```
+
+* 应用
+  
+  ```bash
+  sudo netplan try
+  ```
+  
+  ```bash
+  sudo netplan generate
+  sudo netplan apply
+  ```
+
+* 如果连接到了网络，ip addr能看到IP
+  
+  如果没有连接到网络，用以下命令尝试启动无线网卡
+  
+  ```bash
+  sudo ip link set wlan0 up
+  ```
+
+# Ubuntu配置自启动
+
+/etc/systemd/system/
