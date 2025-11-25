@@ -178,7 +178,23 @@ netstat -tunlp | grep <u>port</u>
 
 -p 显示建立相关链接的程序名
 
-      
+# vim
+
+* 显示行号
+  
+  :set number
+
+* 跳转到行
+  
+  :123
+
+* 搜索
+  
+  /string
+
+* 多行插入
+  
+  Ctrl+v选中多行，I行首插入，Esc退出
 
 # Bash脚本
 

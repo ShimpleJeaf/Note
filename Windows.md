@@ -75,7 +75,21 @@ CD D:
 * 查看被共享网卡的ip，如上所说的”以太网“
   
   该网卡的IP应和WLAN保持一致，如果IP地址设置错误了，即使保存了再进去属性看IPv4地址，也是被清空了的
-  
-  
-  
-  
+
+# wsl
+
+## 网络代理
+
+1. 网络模式改为VirtioProxy
+
+2. wsl内设置代理
+   
+   ```bash
+   # 注意：VirtioProxy时wsl的ip和主机ip是一样的，但是用该ip访问不了代理，
+   # 这里要用0.0.0.0进行访问
+   export http_proxy=http://0.0.0.0:20808
+   export https_proxy=http://0.0.0.0:20808
+   export all_proxy=http://0.0.0.0:20808
+   ```
+
+3. 可以将上诉脚本写入.bashrc中

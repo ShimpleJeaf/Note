@@ -83,6 +83,28 @@ l.remove("dfkj")# 删除第一个匹配的元素
 
 [Python 字符串 | 菜鸟教程](https://www.runoob.com/python/python-strings.html)
 
+* 前缀修饰符r
+  
+  ```python
+  a = r"hello\nworld" # r表明这是一个普通字符串，忽略转义字符
+  print(a) # 输出：hello\nworld
+  ```
+
+* 格式化输出
+  
+  ```python
+  print "My name is %s and weight is %d kg!" % ('Zara', 21) 
+  ```
+
+* join 以分隔符串联字符串
+  
+  以 string 作为分隔符，将 seq 中所有的元素(的字符串表示)合并为一个新的字符串
+  
+  ```python
+  C_FILE_SUFFIXES = ['hxx', 'cpp']
+  '|'.join(C_FILE_SUFFIXES) # 'hxx|cpp'
+  ```
+
 # 执行外部命令
 
 ```python
