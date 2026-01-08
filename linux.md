@@ -432,3 +432,13 @@ sudo ip route add default via 192.168.1.1
 # Ubuntu配置自启动
 
 /etc/systemd/system/
+
+# 换源
+
+换源工具 chsrc
+
+[chsrc: chsrc 全平台通用换源工具与框架. Change Source everywhere for every software](https://gitee.com/RubyMetric/chsrc)
+
+```bash
+chsrc set ubuntu tuna
+```
