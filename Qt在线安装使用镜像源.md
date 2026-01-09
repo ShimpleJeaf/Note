@@ -19,7 +19,7 @@ qt-online-installer-windows-x64-4.8.0.exe --mirror https://mirrors.tuna.tsinghua
 或
 
 ```bat
-MaintenanceTool.exe --mirror https://mirrors.tuna.tsinghua.edu.cn/qt
+MaintenanceTool.exe --mirror https://mirrors.ustc.edu.cn/qtproject
 ```
 
 ## 3. 镜像拒绝连接（server replied: Forbidden）
