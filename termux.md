@@ -168,8 +168,56 @@ vnc的性能比较差，3D的话用termux-x11比较好
 
 ## mobox安装wine
 
+mobox的wine版本只到9
+
 ```bash
 curl -s -o ~/x https://raw.githubusercontent.com/olegos2/mobox/main/install && . ~/x
+```
+
+# proot-distro
+
+```
+proot-distro list
+proot-distro install debian
+proot-distro login debian
+proot-distro login debian --user shimple --shaded-tmp
+```
+
+## socat
+
+因为proot-distro的程序是无法绑定到0.0.0.0的，会导致外部无法访问
+
+将proot-distro内的监听端口转发到termux
+
+```bash
+pkg install socat
+
+# proot-distro容器端口p1转发到termux端口p2
+# p1和p2不能相同
+socat TCP-LISTEN:p2,fork TCP:127.0.0.1:p1
+```
+
+## debian
+
+### 添加普通用户
+
+```bash
+# root用户下
+adduser shimple
+# 给shimple用户加root权限
+# /etc/sudoers，末尾加
+shimple ALL=(ALL:ALL) ALL
+```
+
+### 移除i386架构包
+
+```bash
+# 删除所有i386包
+sudo dpkg --purge --force-all $(dpkg --get-selections |awk '/i386/{print $1}')
+# 移除i386架构
+dpkg --remove-architecture i386
+# 查看其他架构
+dpkg --print-foreign-architectures
 ```
 
 # ssh
