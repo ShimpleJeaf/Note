@@ -201,6 +201,8 @@ socat TCP-LISTEN:p2,fork TCP:127.0.0.1:p1
 
 ### 添加普通用户
 
+提示没有sudo命令时，安装sudo包
+
 ```bash
 # root用户下
 adduser shimple
@@ -219,6 +221,16 @@ dpkg --remove-architecture i386
 # 查看其他架构
 dpkg --print-foreign-architectures
 ```
+
+## 换源
+
+清华源
+
+https://mirrors.tuna.tsinghua.edu.cn/help/
+
+## dialog
+
+文本交互界面
 
 # ssh
 
@@ -299,4 +311,13 @@ termux-x11 :1 -xstartup "xfce4-session"
 ```bash
 export TERMUX_X11_XSTARTUP="xfce4-session"
 termux-x11 :1
+```
+
+启动脚本
+
+```bash
+export MESA_LOADER_DRIVER_OVERRIDE=llvmpipe
+vncserver :3 &
+export DISPLAY=:3
+dbus-launch xfce4-session &
 ```
