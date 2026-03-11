@@ -1,23 +1,65 @@
 # pip
 
-## 通过文件列表安装包依赖
+* 通过文件列表安装包依赖
+  
+  ```bash
+  pip install -r requirements.txt
+  ```
 
-```bash
-pip install -r requirements.txt
-```
+* 卸载所有第三方依赖包
+  
+  ```bash
+  pip freeze >a.txt
+  pip uninstall -r a.txt -y
+  ```
 
-## 卸载所有第三方依赖包
+* 更新软件包
+  
+  ```bash
+  pip install --upgrade name
+  ```
 
-```bash
-pip freeze >a.txt
-pip uninstall -r a.txt -y
-```
+# uv
 
-## 更新软件包
+* 列出当前所有python
+  
+  ```bash
+  uv python list
+  ```
 
-```bash
-pip install --upgrade name
-```
+* 查看当前启用python
+  
+  ```bash
+  uv python find
+  ```
+
+* 创建虚拟环境
+  
+  ```bash
+  uv venv
+  ```
+
+* 激活环境
+  
+  Windows
+  
+  ```bash
+  .venv\Scripts\activate
+  ```
+  
+  Linux
+  
+  ```bash
+  source .venv/bin/activate
+  ```
+
+* 安装包
+  
+  ```bash
+  uv pip install requests==2.31.0
+  ```
+  
+  包管理命令和pip一致
 
 # 全局变量
 
