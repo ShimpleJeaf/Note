@@ -33,6 +33,8 @@ cmake可以根据配置将.in生成最终的源代码文件
 
 find_package()函数会在CMAKE_PREFIX_PATH目录中查找模块文件。
 
+CMAKE_PREFIX_PATH可以用环境变量设置。
+
 boost的cmake模块文件为BoostConfig.cmake
 
 ## find_path的搜索路径
@@ -64,21 +66,57 @@ message([STATUS | WARNING | AUTHOR_WARNING | FATAL_ERROR | SEND_ERROR] "message 
 | SEND_ERROR     | cmake错误，继续执行，但是会跳过生成的步骤 |
 | FATAL_ERROR    | cmake错误，终止所有处理过程        |
 
-# 编译器选项
+# 构建和编译
 
-## Release Debug
+* 构建工程
+  
+  ```bash
+  mkdir build
+  cd build
+  cmake .. -G "Visual Studio 18 2026" -A x64 -DCMAKE_INSTALL_PREFIX=C:\Install
+  ```
+  
+  * -DCMAKE_CXX_FLAGS="/MP"
+    
+    可以指定msbuild的/MP选项，也可以查看CMakeList.txt内使用多线程编译需要的条件
+  
+  * CMAKE_INSTALL_PREFIX在环境变量中定义也能生效，linux不能生效，要在命令行指定
+
+* 编译
+  
+  ```bash
+  cmake --build . --config RelWithDebInfo --target INSTALL
+  ```
+  
+  * 为编译器指定参数
+    
+    ```bash
+    cmake --build . --config Release -- /p:CL_MP=true
+    ```
+    
+    msbuild中指定参数时/和-是一样的，make中可能不需要用--进行
+    
+    ```bash
+    cmake --build . --config Release -j
+    ```
+  
+  * cmake --build通常就相当于msbuild或make或ninja
+
+## 编译器选项
+
+### Release Debug
 
 ```batch
 cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo
 ```
 
-## 编译选项
+### 编译选项
 
 CMAKE_C_FLAGS
 
 CMAKE_CXX_FLAGS
 
-## 链接选项
+### 链接选项
 
 CMAKE_SHARED_LINKER_FLAGS
 
