@@ -18,8 +18,32 @@ git clone --recursive <url>
 
 **断点续传**
 
+该命令在有些版本不能用
+
 ```bash
 git clone --resume <url>
+```
+
+**浅克隆**
+
+只克隆代码，不克隆历史记
+
+```bash
+git clone --depth 1 <url>
+```
+
+恢复克隆所有历史
+
+```bash
+git fetch --unshallow
+```
+
+**克隆指定版本**
+
+使用--branch，后面可以跟tag、commit版本号，还可以和depth一起用，用于只克隆某个指定的版本
+
+```bash
+git clone --branch OpenSceneGraph-3.6.5 <url>
 ```
 
 # submodule 子模块
@@ -56,6 +80,8 @@ git mv srcDir dstDir
 * --mixed    head、index更改，但是本地代码不变，重置到版本后的所有变更作为本地修改保存在工作区中
 
 * --hard    head、index、工作区代码全部回滚到指定版本，但是不会影响未跟踪的文件
+
+参数可以是commit号或tag号
 
 # reflog
 
