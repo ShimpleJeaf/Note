@@ -33,6 +33,14 @@
   uv python find
   ```
 
+* 指定python版本
+  
+  会生成一个.python-version 
+  
+  ```bash
+  uv python pin 3.10
+  ```
+
 * 创建虚拟环境
   
   ```bash

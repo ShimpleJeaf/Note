@@ -60,6 +60,12 @@ sudo make install
 
 ## 编译osgearth
 
+注意osg编译的Debug库名字默认带d，而osgEarth默认不带d，这会导致osgEarth编译的osgPlugin库加载不上（因为名字不对），需要让osgEarth编译的Debug库名字也带d
+
+```bash
+-DCMAKE_BUILD_TYPE=Debug -DCMAKE_DEBUG_POSTFIX=d
+```
+
 ```bash
 git clone --branch osgearth-3.8 --depth 1 https://github.com/gwaldron/osgearth.git
 cd osgEarth
