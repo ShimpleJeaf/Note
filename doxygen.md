@@ -4,6 +4,42 @@
 
 * 如果Doxyfile文件版本过低，可以用doxygen -u进行升级
 
+* linux上的ui程序：doxywizard
+  
+  ```bash
+  doxywizard Doxyfile
+  ```
+
+# 配置
+
+一个选项有多个值时，用 \ 加换行进行分隔
+
+* 无后缀识别为C++
+  
+  ```ini
+  EXTENSION_MAPPING = no_extension=C++
+  ```
+
+* 源码目录
+  
+  ```ini
+  INPUT = src1 \
+          src2
+  ```
+
+* 后缀匹配
+  
+  ```ini
+  FILE_PATTERNS = *.c \
+                  *.cxx
+  ```
+
+* 排序
+  
+  函数等的排序不是全部默认开启的
+  
+  SORT_* 所有的排序配置都设置为YES
+
 # 注释语法
 
 * 块注释

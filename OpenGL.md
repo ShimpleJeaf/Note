@@ -142,6 +142,34 @@ $V_{clip}=M_{projection} \cdot M_{view} \cdot M_{model} \cdot V_{local}$
      
      OpenGL包含6个不同的着色阶段（shager stage）。其中最常用也是**必须**的是顶点着色器（vertex shader）和片元着色器，前者用于处理顶点数据，后者用于处理光栅化后的片元数据。
 
+## OpenGL版本清单
+
+| 时间         | OpenGL版本  | GLSL版本   | 备注                             |
+| ---------- | --------- | -------- | ------------------------------ |
+| 2004年9月7日  | OpenGL2.0 | GLSL1.1  | OpenGLES2.0是基于此版本进行API和功能删减后得到 |
+| 2006年7月2日  | OpenGL2.1 | GLSL1.2  |                                |
+| 2008年8月11日 | OpenGL3.0 | GLSL1.3  |                                |
+| 2009年3月24日 | OpenGL3.1 | GLSL1.4  |                                |
+| 2009年8月3日  | OpenGL3.2 | GLSL1.5  |                                |
+| 2010年3月11日 | OpenGL3.3 | GLSL3.30 |                                |
+| 2010年3月11日 | OpenGL4.0 | GLSL4.00 |                                |
+| 2010年7月26日 | OpenGL4.1 | GLSL4.10 |                                |
+| 2011年8月8日  | OpenGL4.2 | GLSL4.20 |                                |
+| 2012年8月6日  | OpenGL4.3 | GLSL4.30 | OpenGLES3.0与桌面版OpenGL4.3是一样的   |
+| 2013年7月22日 | OpenGL4.4 | GLSL4.40 |                                |
+| 2014年8月11日 | OpenGL4.5 | GLSL4.50 | OpenGLES3.1与该版本是对应的            |
+| 2017年7月31日 | OpenGL4.6 | GLSL4.60 |                                |
+
+## OpenGL模式
+
+* Core Profile
+  
+  这种模式下，对你编写opengl程序有着严格的要求，比如你只能用VAO作为shader的输入，它无法兼顾1.x、2.x平台，因为Core Profile是在3.x平台才出现的概念。
+
+* Compatible Profile
+  
+  在这种模式下，你可以写一套兼容全平台的代码，你的代码即可以是1.x也可以是2.x，也可以是Core Profile的，这种模式下，写代码更加的宽松。
+
 ## OpenGL渲染管线
 
 1. 准备向OpenGL传输数据

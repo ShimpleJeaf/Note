@@ -23,6 +23,35 @@ qmake
 make
 ```
 
+## Debugger std::string 显示无法访问
+
+将/usr/share/qtcreator/debugger/stdtypes.py中的
+
+def qdumpHelper_std__string(d, value, charType, format):函数改为：
+
+```python
+def qdumpHelper_std__string(d, value, charType, format):
+    if d.isQnxTarget():
+        qdumpHelper__std__string__QNX(d, value, charType, format)
+        return
+    if d.isMsvcTarget():
+        qdumpHelper__std__string__MSVC(d, value, charType, format)
+        return
+
+    data = value.extractPointer()
+    # We can't lookup the std::string::_Rep type without crashing LLDB,
+    # so hard-code assumption on member position
+    # struct { size_type _M_length, size_type _M_capacity, int _M_refcount; }
+
+    (size, alloc, refcount) = d.split("ppp", value.address() + d.ptrSize())
+    refcount = refcount & 0xffffffff
+    d.check(refcount >= -1) # Can be -1 according to docs.
+
+    if size > 4002:
+        size = 4002
+    d.putCharArrayHelper(data, size, charType, format)
+```
+
 ## 用windeployqt工具对Qt程序进行打包
 
 **Windeployqt**
