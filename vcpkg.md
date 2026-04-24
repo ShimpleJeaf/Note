@@ -26,9 +26,9 @@
    
    在环境变量中加入VCPKG_DEFAULT_TRIPLET
    
-   ```bash
-   # linux
-   export VCPKG_DEFAULT_TRIPLET=x64-windows
+   ```batch
+   :: windows
+   set VCPKG_DEFAULT_TRIPLET=x64-windows
    ```
 
 # 代理
@@ -53,8 +53,10 @@
 
 * 查看依赖
   
+  core表示不包含默认可选组件
+  
   ```bash
-  vcpkg depend-info <software>
+  vcpkg depend-info <software>[core,png]
   ```
 
 * 安装
@@ -79,17 +81,37 @@
 
 * 使用vcpkg.json指定项目依赖
   
+  [vcpkg.json 参考 | Microsoft Learn](https://learn.microsoft.com/zh-cn/vcpkg/reference/vcpkg-json)
+  
   * vcpkg.json放在项目文件下，示例：
     
     ```json
     {
-        "$schema":  "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
-        "dependencies": [
-            "glew",
-            "glfw3",
-            "spdlog",
-            "glm"
-        ]
+      "$schema":  "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+      "dependencies": [
+        "glew",
+        "glfw3",
+        "spdlog",
+        "glm",
+        {
+          "name": "libdb",
+          "version": "1.0.0",
+          "version>=": "1.0.0" // 指定版本范围
+          "default-features": false, // 安装默认组件，默认值是true，大多数情况应该定义为false，明确指定需要的功能
+          "features": [ "json" ]
+        },
+        {
+          "name": "ffmpeg",
+          "default-features": false,
+          "features": [
+            "mp3lame",
+            {
+              "name": "avisynthplus",
+              "platform": "windows"
+            }  
+          ]
+        }
+      ]
     }
     ```
   

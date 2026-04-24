@@ -17,11 +17,81 @@ set(ENV{https_proxy} "http://127.0.0.1:8082")
   set(ENV{<variable>} [<value>])
   ```
 
+# 变量
+
+```cmake
+message("curl_library" ${CURL_LIBRARAY})
+```
+
 # CMakePresets.json和CMakeUserPresets.json
+
+[cmake-presets(7) — CMake 4.3.1 Documentation](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html)
+
+需要cmake 3.19以上
 
 这两个是工程配置文件，前者是与本地环境无关的部分，后者是本地相关的部分
 
 前者会被项目跟踪，而后者不会，一般从前者自动生成，和.pro与.pro.user文件间的关系相似
+
+CMakePresets 支持 configure、build、test、package 几个阶段
+
+不要使用相对路径（./build)，使用\${sourceDir}进行引用
+
+CMakePresets.json示例
+
+```json
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 19,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "macos",
+      "hidden": true,
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Darwin"
+      },
+      "generator": "Xcode",
+      "warnings": {"dev": true, "deprecated": true},
+      "cacheVariables": {
+        "BUILD_TESTING": "OFF"
+      }
+    },
+    {
+      "name": "darwin-debug",
+      "inherits": "macos",
+      "displayName": "Darwin 10.14+ (Debug)",
+      "description": "NetEase MSS C wrapper for macOS - Debug Configuration",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "BUILD_TESTING": "ON",
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/darwin-debug"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "darwin-debug",
+      "configurePreset": "darwin-debug",
+      "displayName": "Darwin Local Compilation (Debug)",
+      "description": "NetEase MSS C wrapper for macOS - Debug Configuration",
+      "configuration": "Debug"
+    },
+    {
+      "name": "darwin-release-x86_64",
+      "configurePreset": "darwin-release-x86_64",
+      "displayName": "Darwin x86_64 Local Compilation (Release)",
+      "description": "NetEase MSS C wrapper for macOS x86_64 - Release Configuration",
+      "configuration": "Release",
+      "targets": ["install"]
+    },
+```
 
 # .in文件生成源代码文件
 
@@ -69,6 +139,8 @@ message([STATUS | WARNING | AUTHOR_WARNING | FATAL_ERROR | SEND_ERROR] "message 
 # 构建和编译
 
 * 构建工程
+  
+  路径变量值有多个路径用;（分号）分隔
   
   ```bash
   mkdir build

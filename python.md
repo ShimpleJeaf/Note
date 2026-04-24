@@ -67,7 +67,7 @@
   uv pip install requests==2.31.0
   ```
   
-  包管理命令和pip一致
+  包管理命令和pip一致，但是不能直接用pip进行安装，因为venv里没有pip.exe，激活虚拟环境后pip的版本和python不是配套的
 
 # 全局变量
 

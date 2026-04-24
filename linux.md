@@ -442,3 +442,35 @@ sudo ip route add default via 192.168.1.1
 ```bash
 chsrc set ubuntu tuna
 ```
+
+# 桌面、服务器模式切换
+
+* 安装服务器
+  
+  ```bash
+  sudo apt install ubuntu-server
+  # 或
+  sudo apt install ubuntu-server-minimal
+  ```
+
+* 安装桌面
+  
+  ```bash
+  sudo apt install ubuntu-desktop
+  # 或
+  sudo apt install ubuntu-desktop-minimal
+  ```
+
+* 切换服务器终端模式
+  
+  ```bash
+  sudo systemctl set-default multi-user.target
+  sudo reboot
+  ```
+
+* 切换桌面图形模式
+  
+  ```bash
+  sudo systemctl set-default graphical.target
+  sudo reboot
+  ```
