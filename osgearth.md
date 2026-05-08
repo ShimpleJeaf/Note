@@ -165,3 +165,129 @@ LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:/usr/local/lib64
 * atlasdatatech/tiler
   
   命令行工具
+
+# 坐标系
+
+osg使用的右手坐标系：X轴向右，Y轴向上，Z轴向后
+
+osgearth使用扩展的地理坐标系：默认使用ENU（东-北-天）（X-Y-Z）
+
+大部分软件中XYZ轴的颜色是r g b（r-x，g-y，b-z）
+
+# 动画
+
+MatrixTransform是osgearth场景图的其中一个节点，用于控制模型的变换（移动、缩放、旋转等），UpdateMatrixTransform是一个回调对象，包含动画的变换信息，将UpdateMatrixTransform设置为MatrixTransform的回调，则可让其自动更新动画变换，最终形成动画。StackedElement包含具体的动画变换信息，与Anmation中的Channel一一对应
+
+```mermaid
+classDiagram
+    Node <|-- MatrixTransform
+
+    class MatrixTransform {
+        +setUpdateCallback() void
+    }
+
+    MatrixTransform --* UpdateMatrixTransform
+
+    UpdateCallback <|-- UpdateMatrixTransform
+    UpdateMatrixTransform --* StackedElement
+    class UpdateMatrixTransform {
+        -vector~StackedElement~ _stackedElements
+    }
+
+    StackedElement <|-- StackedTranslateElement
+    StackedElement <|-- StackedScaleElement
+    StackedElement <|-- StackedQuaternionElement
+```
+
+osg::Animation结构
+
+一个最基本的动画包含多个通道，一个通道表示一个维度的变换（移动、缩放或旋转等），一个通道包含一个Sampler，sampler决定了每次变换该怎么取什么值，如果是关键帧动画，sampler就会包含相应的关键帧信息。而Animation和节点中的UpdateMatrixTransform之间的纽带则是Channel中的targetName和name，targetName必须和UpdateMatrixTransform的名字一样，name必须和StackedElement的名字一样。
+
+```mermaid
+classDiagram
+    class Animation {
+        vector~Channel~ channels
+    }
+
+    class Channel {
+        +setTargetName()
+        +setName()
+        -string targetName
+        -string name
+    }
+
+    Animation --* Channel
+    Channel --* Sampler
+    Sampler --* KeyFrameContainer
+    KeyFrameContainer --* KeyFrame
+    class KeyFrameContainer {
+        -vector~KeyFrame~ keyFrames
+    }
+```
+
+# gltf结构 tiny_gltf
+
+```mermaid
+classDiagram
+    class Model {
+        vector~Accessor~
+        vector~Animation~
+        vector~Buffer~
+        vector~BufferView~
+        vector~Material~
+        vector~Mesh~
+        vector~Node~
+        vector~Texture~
+        vector~Image~
+        vector~Skin~
+        vector~Sampler~
+        vector~Camera~
+        vector~Scene~
+        vector~Light~
+    }
+
+    class Scene {
+        string name
+        vector<int> nodes
+    }
+
+    class Node {
+        int camera
+        string name
+        int skin
+        int mesh
+        vector~int~ child
+        vector~double~ rotation
+        vector~double~ scale
+        vector~double~ translate
+        vector~double~ matrix
+        vector~double~ weights
+    }
+    class Accessor {
+        int BufferView
+        string name
+        size_t byteOffset
+        bool normalized
+        int componentType
+        size_t count
+        int type
+    }
+    class Animation {
+        string name
+        vector~AnimationChannel~ channels
+        vector~AnimationSampler~ samplers
+    }
+    class AniamtionChannel {
+        int sampler
+        int target_node
+        // "rotation", "translate", "scale", "weights"
+        string target_path 
+    }
+    class AnimationSampler {
+        // 当使用关键帧时，input是时间，output是对应的
+        int input // accessorIndex
+        int output // accessorIndex
+        // "LINEAR", "STEP", "CUBICSPLINE"
+        string interpolation 
+    }
+```

@@ -38,6 +38,16 @@ git clone --depth 1 <url>
 git fetch --unshallow
 ```
 
+拉取指定commit，hash值要完整的
+
+包含该记录之前的所有记录
+
+如果不要之前的记录，加--depth=1
+
+```bash
+git fetch origin <commit-hash>
+```
+
 **克隆指定版本**
 
 使用--branch，后面可以跟tag、commit版本号，还可以和depth一起用，用于只克隆某个指定的版本
@@ -111,9 +121,44 @@ git gc 是指“垃圾回收（garbage collection）”，用于清理和优化 
 
 # fecth和pull
 
-`git fetch`是将远程主机的最新内容拉到本地，用户在检查了以后决定是否合并到工作本机分支中。
+* `git fetch`是将远程主机的最新内容拉到本地，用户在检查了以后决定是否合并到工作本机分支中。
 
-而`git pull` 则是将远程主机的最新内容拉下来后直接合并，即：`git pull = git fetch + git merge`，这样可能会产生冲突，需要手动解决。
+* 拉取指定commit 
+  
+  ```bash
+  git fetch origin <commit-hash>
+  ```
+
+* 只拉取一层记录
+  
+  ```bash
+  git fetch --depth=1 origin <commit-hash>
+  ```
+
+* 而`git pull` 则是将远程主机的最新内容拉下来后直接合并，即：`git pull = git fetch + git merge`，这样可能会产生冲突，需要手动解决。
+
+# checkout
+
+* 切换分支
+  
+  ```bash
+  # 切换到主分支
+  git checkout master
+  ```
+
+* 检出文件
+  
+  将文件恢复到最近一次提交的状态
+  
+  ```bash
+  git checkout -- <file>
+  ```
+
+* 切换到特定提交
+  
+  ```bash
+  git checkout <commit-hash>
+  ```
 
 # 仓库迁移
 
@@ -183,10 +228,10 @@ git branch --no-merged 查看所有未合并工作的分支
   git checkout branchname
   ```
 
-* 创建并切换分支
+* 创建并切换分支，可指定tag或其他分支为基准
   
   ```bash
-  git checkout -b branchname
+  git checkout -b branchname <tag>
   ```
 
 * 删除分支
@@ -295,18 +340,119 @@ git rebase master
 
 # 从历史记录中删除一个文件
 
+* filter-branch
+  
+  新版本git已经不推荐使用该工具了
+  
+  ```bash
+  git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch secret.txt' --prune-empty --tag-name-filter cat -- --all
+  ```
+  
+  secret.txt将从版本记录中完全删除
+  
+  注意：
+  
+  * 这是一个耗时的操作
+  
+  * 文件路径是相对于git仓库根目录的
+  
+  * 文件路径不要以 / 开头，否则将会认为是相对git安装目录的路径
+  
+  * 如果是删除文件夹，在 --cache 后加 -r 递归删除
+
+* fliter-repo
+  
+  安装：
+  
+  ```bash
+  pip install git-filter-repo
+  ```
+  
+  使用：
+  
+  ```bash
+  git filter-repo --path example.txt --invert-paths
+  ```
+
+# git lfs 大文件管理
+
+## 迁移已经提交的大文件到lfs
+
+**迁移已经提交的文件到lfs，可能会遇到上传困难的问题，特别是记录很多的时候**
+
+引用：[将项目的资源文件迁移成 Git LFS 的心得 | jmjoy](https://jmjoy.github.io/posts/2025/%E5%B0%86%E9%A1%B9%E7%9B%AE%E7%9A%84%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E8%BF%81%E7%A7%BB%E6%88%90-git-lfs-%E7%9A%84%E5%BF%83%E5%BE%97/)
+
+1. 备份仓库
+
+2. 安装并初始化lfs
+   
+   ```bash
+   git lfs install
+   ```
+
+3. 识别需要迁移的大文件
+   
+   ```bash
+   find . -type f -size +10M
+   ```
+
+4. 执行迁移命令
+   
+   ```bash
+   git lfs migrate import --everything --include="*.webp,*.png,*.jpg,*.mp3,*.mp4"
+   ```
+   
+   * --everything： 会重写所有本地分支和标签
+   
+   * --include：制定需要迁移的文件模式，可以用逗号分隔多个模式
+
+5. 提交.gitattributes文件
+   
+   ```bash
+   git add .gitattributes
+   git commit -m "chore: Configure Git LFS tracking"
+   ```
+
+6. 强制推送到远程仓库
+   
+   因为重写了历史记录，无法直接push
+   
+   ```bash
+   # 推送所有被重写的分支
+   git push --force-with-lease --all origin
+   # 推送所有被重写的标签
+   git push --force-with-lease --tags origin
+   ```
+
+7. 通知所有协作者同步
+
+8. 清理本地的.git目录
+   
+   ```bash
+   git reflog expire --expire=now --all
+   git gc --prune=now --aggressive
+   ```
+
+### git lfs ls-files包换的*和-
+
+* -：表示该文件仅存在与本地，还没有推送到远程LFS服务器
+
+* *：表示已经推送到远程服务器
+
+### 后续操作
+
+迁移完成后需要将所有本地LFS对象推送到服务器
+
 ```bash
-git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch secret.txt' --prune-empty --tag-name-filter cat -- --all
+# 推送
+git lfs push --all origin
 ```
 
-secret.txt将从版本记录中完全删除
+如果在本地看到的是文本指针而不是实际文件，用以下命令重新检出文件
 
-注意：
-
-* 这是一个耗时的操作
-
-* 文件路径是相对于git仓库根目录的
-
-* 文件路径不要以 / 开头，否则将会认为是相对git安装目录的路径
-
-* 如果是删除文件夹，在 --cache 后加 -r 递归删除
+```bash
+# 检出文件
+git lfs checkout
+# 或更强制的
+git lfs pull
+```
