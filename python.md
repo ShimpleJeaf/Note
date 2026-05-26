@@ -21,6 +21,16 @@
 
 # uv
 
+* 配置镜像源
+  
+  ```toml
+  # ~/.config/uv/uv.toml (Linux/Mac)
+  # 或 %APPDATA%\uv\uv.toml (Windows)
+  
+  [[index]]
+  url = "https://mirrors.aliyun.com/pypi/simple/"
+  ```
+
 * 列出当前所有python
   
   ```bash
@@ -68,6 +78,22 @@
   ```
   
   包管理命令和pip一致，但是不能直接用pip进行安装，因为venv里没有pip.exe，激活虚拟环境后pip的版本和python不是配套的
+
+* 隔离安装工具
+  
+  把某个python工具包安装在一个独立的环境中
+  
+  ```python
+  uv tool install openhands
+  ```
+  
+  运行
+  
+  ```python
+  uv tool run openhands
+  # 或
+  uvx openhands
+  ```
 
 # 全局变量
 

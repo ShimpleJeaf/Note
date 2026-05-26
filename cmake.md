@@ -19,9 +19,21 @@ set(ENV{https_proxy} "http://127.0.0.1:8082")
 
 # 变量
 
-```cmake
-message("curl_library" ${CURL_LIBRARAY})
-```
+* 注意：变量名字是大小写敏感的
+
+* 定义
+  
+  ```cmake
+  set(Value "dlkfjl")
+  ```
+
+* 引用
+  
+  使用${}进行引用
+  
+  ```cmake
+  message("curl_library" ${CURL_LIBRARAY})
+  ```
 
 # CMakePresets.json和CMakeUserPresets.json
 
@@ -101,11 +113,41 @@ cmake可以根据配置将.in生成最终的源代码文件
 
 ## find_package 模块查找
 
-find_package()函数会在CMAKE_PREFIX_PATH目录中查找模块文件。
-
-CMAKE_PREFIX_PATH可以用环境变量设置。
+* find_package()函数会在CMAKE_PREFIX_PATH目录中查找模块文件。
+  
+  CMAKE_PREFIX_PATH可以用环境变量设置。
 
 boost的cmake模块文件为BoostConfig.cmake
+
+* find_package()有三种模式，常用有两种模式：模块模式、配置模式
+  
+  两种模式查找的文件：
+  
+  * 模块模式：
+    
+    Find<PackageName>.cmake
+  
+  * 配置模式
+    
+    - <lowercasePackageName>-config.cmake
+    
+    - <PackageName>Config.cmake
+    
+    - <PackageName>.cps
+    
+    - <lowercasePackageName>.cps
+
+* 如果找到了包，则会定义PackageName_Found的变量
+  
+  注意：find_package(packageName)的参数是不分大小写的，但是PackageName_Found这个变量的名字是分大小写的
+  
+  ```cmake
+  find_package(levelDB) # 如果找到，会生成levelDB_Found变量，实际的文件名是leveldb-config.cmake，也是可以找到
+  if(levelDB_Found) # 有
+  endif()
+  if(LEVELDB_Found) # 没有
+  endif()
+  ```
 
 ## find_path的搜索路径
 
@@ -135,6 +177,102 @@ message([STATUS | WARNING | AUTHOR_WARNING | FATAL_ERROR | SEND_ERROR] "message 
 | AUTHOR_WARNING | cmake警告（dev），会继续执行      |
 | SEND_ERROR     | cmake错误，继续执行，但是会跳过生成的步骤 |
 | FATAL_ERROR    | cmake错误，终止所有处理过程        |
+
+# 函数和宏
+
+## 函数 function
+
+```cmake
+function(function_name arg1 arg2 ...)
+    # function body
+endfunction()
+```
+
+函数可以有返回值，用set配合PARENT_SCOPE实现
+
+```cmake
+function(add_numbers num1 num2 result_var)
+    math(EXPR result "${num1} + ${num2}")
+    set(${result_var} ${result} PARENT_SCOPE) # 使用PARENT_SCOPE将值传递回调用位置
+endfunction()
+```
+
+## 宏 macro
+
+宏没有返回值
+
+```cmake
+macro(PRINT_HELLO_WORLD)
+    message("HELLO WORLD!")
+endmacro()
+
+macro(PRINT_MESSAGE my_message)
+  message("${my_message}")  # 使用宏参数
+  set(var_in_macro "Inside Macro")  # 在宏中定义变量
+endmacro()
+```
+
+## 函数和宏的预定义变量
+
+- **ARGC**：参数总数
+
+- **ARGV**：所有参数列表
+
+- **ARGN**：超出命名参数后的可选参数列表
+
+- **ARGV0, ARGV1...**：按索引访问具体参数值
+
+## 参数解析
+
+可以使用cmake_parse_arguments()进行批量的参数解析
+
+```cmake
+cmake_parse_arguments(<prefix> <options> <one_value_keywords> <multi_value_keywords> <args>...)
+```
+
+<prefix>是解析后的变量前缀，会通过下划线与其他Key名相连；
+<options>表明当前Key名都是option类 型的
+<one_value_keywords>表明当前Key名中只存在一个变量
+<multi_value_keywords>表面当前Key名中可存在多个变量
+
+示例：
+
+```cmake
+function(my_function2 FunctionTarget)
+    set(options ENABLE_PRINT EANBLE_SHOW)
+    set(oneValueArs PRINT_VALUE)
+    set(multiValueArgs SUB_VALUES DEFUALT_VALUES)
+    message(STATUS "function target:${FunctionTarget}")
+    cmake_parse_arguments(FUNC "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+    message(STATUS "ENABLE_PRINT:${FUNC_ENABLE_PRINT}")
+    message(STATUS "ENABLE_SHOW:${FUNC_EANBLE_SHOW}")
+    message(STATUS "PRINT_VALUE:${FUNC_PRINT_VALUE}")
+    foreach(sub ${FUNC_SUB_VALUES})
+        message(STATUS "sub value:${sub}")
+    endforeach()
+    foreach(default ${FUNC_DEFUALT_VALUES})
+        message(STATUS "default value:${default}")
+    endforeach()
+endfunction(my_function2 FunctionTarget)
+
+# 调用
+my_function2(test_target
+    ENABLE_PRINT  # option参数给就是TRUE，不给就是FALSE
+    EANBLE_SHOW  
+    PRINT_VALUE helloworld
+    SUB_VALUES one two three
+    DEFUALT_VALUES ha wa gou so )
+```
+
+## 函数和宏的区别
+
+* 函数的作用方式是调用，获取返回值，使用的是值传递
+  
+  宏的作用方式是字符替换
+
+* 函数中定义的变量作用域只在函数内，宏中定义的变量作用域是全局
+
+* 函数可以有返回值，宏没有返回值
 
 # 构建和编译
 
