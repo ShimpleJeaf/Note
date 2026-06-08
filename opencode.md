@@ -77,6 +77,16 @@ npm config set https-proxy http://ip:port
    codegraph init -i
    ```
 
+4. 其他操作
+   
+   ```bash
+   # 创建索引，如果init的时候没加-i的话，后续可以调用index进行
+   codegraph index
+   
+   # 同步索引
+   codegraph sync
+   ```
+
 # rtk
 
 命令行输出裁剪工具
@@ -100,6 +110,10 @@ npm config set https-proxy http://ip:port
        "plugin": [openrtk]
    }
    ```
+
+4. 测试
+   
+   在opencode中输入ll，如果输出rtk ls -la说明安装成功
 
 # browsermcp
 
