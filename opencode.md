@@ -5,6 +5,7 @@
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
+  "lsp": false,
   "mcp": {
     "context7-mcp": { // 文档获取
       "type": "local",
@@ -130,3 +131,25 @@ https://github.com/browsermcp/mcp
 3. 启动opencode，启用browsermcp
 
 4. 启动浏览器，点击browsermcp插件上的connect，连接上后就可以用了
+
+# claude-mem
+
+1. 安装
+   
+   ```bash
+   npx claude-mem install --ide opencode
+   ```
+
+2. 在opencode.json的plugin里添加claude-mem
+
+3. 在opencode之前启动claude-mem
+   
+   ```bash
+   npx claude-mem start
+   ```
+
+4. 自动启动，在.bashrc中添加命令别名
+   
+   ```bash
+   alias opencode='npx claude-mem start && opencode'
+   ```
