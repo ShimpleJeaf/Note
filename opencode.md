@@ -1,3 +1,7 @@
+# 换行
+
+ctrl + enter
+
 # 插件配置
 
 ~/.config/opencode/opencode.json
@@ -153,3 +157,50 @@ https://github.com/browsermcp/mcp
    ```bash
    alias opencode='npx claude-mem start && opencode'
    ```
+
+# context7-mcp
+
+Context7 是一个基于 Model Context Protocol（MCP）的“文档拉取”服务。它能在你给 LLM（如 Claude、Cursor Copilot、Windsurf 等）的提示（prompt）中，动态地注入**从源头获取的、与你所用库版本完全对应**的官方文档和代码示例，从而避免：
+
+- 过时的示例、基于老旧训练数据的答案
+- LLM 幻觉出不存在的 API
+- 通用但与当前版本不符的代码片段
+
+使用方法：
+
+在正常的输入后面加上use context7
+
+例如：
+
+```bash
+告诉我qwidget怎么用。use context7。
+```
+
+# graphify
+
+* 安装
+  
+  ```bash
+  uv tool install graphifyy
+  graphify install --platform opencode
+  ```
+
+* /graphify命令
+  
+  /graphify是opencode内的命令，但是不能自动补全，因为他的形式是skill，不支持自动补全
+  
+  ```bash
+  # 初始化
+  /graphify .
+  # 添加知识
+  /graphify add https://arxiv.org/abs/1706.03762
+  ```
+
+* 额外ignore
+  
+  .graphifyignore文件
+  
+  ```gitignore
+  dist/
+  !/install/include
+  ```

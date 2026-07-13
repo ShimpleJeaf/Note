@@ -512,3 +512,18 @@ chsrc set ubuntu tuna
   sudo systemctl set-default graphical.target
   sudo reboot
   ```
+
+# 补全不区分大小写
+
+```bash
+# .inputrc
+set completion-ignore-case on
+```
+
+# checkinstall
+
+sudo apt install checkinstall
+
+用sudo checkinstall代替make install，checkinstall将会把所有文件打成一个deb包
+
+后续就可以用apt进行卸载了

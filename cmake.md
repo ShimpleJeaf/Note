@@ -276,6 +276,8 @@ my_function2(test_target
 
 # 构建和编译
 
+## 构建编译流程
+
 * 构建工程
   
   路径变量值有多个路径用;（分号）分隔
@@ -311,6 +313,25 @@ my_function2(test_target
     ```
   
   * cmake --build通常就相当于msbuild或make或ninja
+- 常用流程
+  
+  ```bash
+  cmake -B builddir -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH= -DCMAKE_INSTALL_PREFIX=
+  # 前面指定了CMAKE_BUILD_TYPE后这的--config选项可以不要
+  # -- 后面的参数原样传给编译工具，这个-j 16是传给make的多线程编译选项
+  cmake --build builddir --config Release -- -j 16
+  ```
+
+## 常用构建选项
+
+```bash
+--build build-dir
+--install build-dir
+--config [Debug | Release | ReleaseWithDebugInfo]
+-DCMAKE_PREFIX_PATH=
+-DCMAKE_INSTALL_PREFIX=
+-DCMAKE_BUILD_TYPE=
+```
 
 ## 编译器选项
 
@@ -331,3 +352,35 @@ CMAKE_CXX_FLAGS
 CMAKE_SHARED_LINKER_FLAGS
 
 CMAKE_EXE_LINKER_FLAGS
+
+# 多配置编译安装到不同目录
+
+有两种方式：使用--install或使用两个不同的build目录
+
+1. 使用--install，需要多配置编译器
+   
+   ninja和make不行，因为他们一个build目录只能编译一种配置
+   
+   ```bash
+   # 构建时如果需要两种配置的依赖库，可以同时传入
+   cmake -B build "-DCMAKE_PREFIX_PATH=$PWD/../install/Debug;$PWD/../install/Release" 
+   
+   cmake --build build --config Debug
+   cmake --build build --config Release
+   
+   cmake --install build --config Debug --prefix $(pwd)/../install/Debug
+   cmake --install build --config Release --prefix $(pwd)/../install/Release
+   ```
+
+2. 使用两个不同的build目录
+   
+   ```bash
+   cmake -B build-debug -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$(pwd)/../install/Debug
+   cmake -B build-release -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$(pwd)/../install/Release
+   
+   cmake --build build-debug
+   cmake --install build-debug
+   
+   cmake --build build-release
+   cmake --install build-release
+   ```

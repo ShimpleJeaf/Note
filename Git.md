@@ -178,6 +178,59 @@ git gc 是指“垃圾回收（garbage collection）”，用于清理和优化 
   git checkout <commit-hash>
   ```
 
+# .gitignore
+
+.gitignore的语法如下：
+
+* 所有空行或者以 ＃ 开头的行都会被 Git 忽略
+
+* ! 表示不忽略
+
+* 匹配模式可以以（/）开头只匹配当前目录下的匹配文件夹，可以防止递归
+
+* 匹配模式可以以（/）结尾表示当前匹配是一个目录
+
+优先级：
+
+* 局部优先于全局
+
+* 子文件优先于父文件
+
+* 后一行优先于前一行
+
+检查为什么会被忽略：
+
+```bash
+git check-ignore -v <path>
+```
+
+当忽略父目录时，无法取消忽略子目录：
+
+```gitignore
+/osgearthlib/
+!/osgearthlib/Debug/  # 这一行不会生效，因为osgearthlib目录整个被忽略了，为了性能，git不会检查下面的目录
+```
+
+正确的写法：
+
+```gitignore
+/osgearthlib/*
+!/osgearthlib/Debug/
+```
+
+更多级时：
+
+```gitignore
+/osgearthlib/*
+!/osgearthlib/Debug/
+/osgearthlib/Debug/*
+!/osgearthlib/Debug/include/
+```
+
+## 只在当前项目本地忽略
+
+配置.git/info/exclude文件，语法和.gitignore一样
+
 # 仓库迁移
 
 1. 将原仓库克隆到本地
@@ -243,10 +296,18 @@ git branch --no-merged 查看所有未合并工作的分支
 * 切换分支
   
   ```bash
+  git switch branchname
+  ```
+  
+  ```bash
   git checkout branchname
   ```
 
 * 创建并切换分支，可指定tag或其他分支为基准
+  
+  ```bash
+  git switch -c branchname
+  ```
   
   ```bash
   git checkout -b branchname <tag>

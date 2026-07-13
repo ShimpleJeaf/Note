@@ -1,5 +1,18 @@
 # pip
 
+* 配置镜像源
+  
+  ~/.pip/pip.conf
+  
+  ```ini
+  [global]
+  index-url = https://pypi.tuna.tsinghua.edu.cn/simple
+  [install]
+  trusted-host=mirrors.aliyun.com
+  ```
+  
+  Windows下为：%userprofile%/pip/pip.ini
+
 * 通过文件列表安装包依赖
   
   ```bash
