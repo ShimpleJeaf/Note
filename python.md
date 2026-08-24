@@ -108,6 +108,14 @@
   uvx openhands
   ```
 
+* 指定缓存路径，在跨磁盘时可在不同的磁盘建立不同缓存目录，避免硬链接失败
+  
+  项目下新建uv.toml
+  
+  ```toml
+  cache-dir = "D:\\uv-cache"
+  ```
+
 # 全局变量
 
 ```python

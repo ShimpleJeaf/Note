@@ -2,6 +2,19 @@
 
 ctrl + enter
 
+# 权限配置
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permission": {
+	"edit": {
+	  "/mnt/c/Projects/testProj/docs/**": "allow"
+	}
+  }
+}
+```
+
 # 插件配置
 
 ~/.config/opencode/opencode.json
@@ -26,6 +39,15 @@ ctrl + enter
 ```
 
 插件都是npm包，配置前先用npm install -g进行安装
+
+~/.config/opencode/tui.jsonc
+
+```json
+{
+  "$schema": "https://opencode.ai/tui.json",
+  "plugin": ["opencode-visual-cache@latest"]
+}
+```
 
 # npm
 

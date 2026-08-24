@@ -272,6 +272,11 @@ classDiagram
         size_t count
         int type
     }
+
+```
+
+```mermaid
+classDiagram
     class Animation {
         string name
         vector~AnimationChannel~ channels
@@ -290,4 +295,5 @@ classDiagram
         // "LINEAR", "STEP", "CUBICSPLINE"
         string interpolation 
     }
+
 ```
