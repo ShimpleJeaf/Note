@@ -291,3 +291,20 @@ https://ollama.com
   函数地址：[Context Length Filter (tokens & turns) Function | Open WebUI Community](https://openwebui.com/f/keke/context_length_filter)
   
   下载后在函数页面导入，全局开启，或者在主页的工作空间中新建一个模型，在模型中加入该函数过滤器。
+
+# llama.cpp
+
+编译
+
+```bash
+# 克隆官方仓库
+# wget https://github.com/ggml-org/llama.cpp/archive/refs/tags/b9843.zip
+git clone --branch b9844 --depth 1 https://github.com/ggml-org/llama.cpp.git
+cd llama.cpp
+
+# 使用 CMake 配置并开启 Vulkan 后端
+cmake -B build -DGGML_VULKAN=ON
+
+# 编译
+cmake --build build --config Release
+```

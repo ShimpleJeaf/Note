@@ -108,9 +108,9 @@ package and compress (archive) files
 
 -e          加密码
 
-uzip        解压
+-y          保留软链接
 
-        
+uzip        解压
 
 # ssh
 
@@ -181,58 +181,58 @@ netstat -tunlp | grep <u>port</u>
 # vim
 
 * 显示行号
-  
+
   :set number
 
 * 跳转到行
-  
+
   :123
 
 * 搜索
-  
+
   /string
 
 * 多行插入
-  
+
   Ctrl+v选中多行，I行首插入，Esc退出
 
 * 退出所有文件
-  
+
   :qa
 
 * 保存所有文件
-  
+
   :wa
 
 * 保存并退出所有文件
-  
+
   :wqa
 
 * 强制退出（不保存）所有文件
-  
+
   qa!
 
 * 撤销
-  
+
   u
 
 * 重做
-  
+
   Ctrl-r
 
 ## diff
 
 vim -d 或vimdiff
 
-| 操作        | 作用          |
-|:--------- | ----------- |
-| [, c      | 跳转到上个差异点    |
-| ], c      | 跳转到下个差异点    |
-| Ctrl-w, w | 在两个窗口间来回切换  |
-| d, p      | 将内容复制到另一边   |
+| 操作      | 作用                   |
+|:--------- | ---------------------- |
+| [, c      | 跳转到上个差异点       |
+| ], c      | 跳转到下个差异点       |
+| Ctrl-w, w | 在两个窗口间来回切换   |
+| d, p      | 将内容复制到另一边     |
 | d, o      | 将内容从另一边复制过来 |
-| z, o      | 查看被折叠的内容    |
-| z, c      | 重新折叠        |
+| z, o      | 查看被折叠的内容       |
+| z, c      | 重新折叠               |
 
 # Bash脚本
 
@@ -268,18 +268,48 @@ echo "done"
 
 执行上面的脚本可能会打印stdin not terminal，实际是执行成功了的，可以用ssh -tt强制终端模式解决。
 
-    
+## 函数
+
+```bash
+# 只要命令失败即退出，不执行后续命令
+set -e
+
+# $0 是命令名，不计入参数个数$#
+# $1 $2 参数
+# $# 参数个数
+# $* 所有参数
+
+# 定义 可以用()或function
+greet(){
+    echo "hello $1"
+}
+function hi {
+    echo "hi $1"
+}
+# 使用
+greet lily
+```
+
+## source
+
+通常运行脚本是在另一个单独的bash中运行的，而source则是在当前bash中运行
+
+## 临时环境变量
+
+```bash
+http_proxy=http://10.10.10.1:8080 wget google.com
+```
 
 # yum
 
 Cent OS 和 RedHat
 
 * 库源配置
-  
+
   1. 配置文件
-     
+
      /etc/yum.repos.d/local.repo
-     
+
      ```ini
      [local]                # 仓库类别
      name=local             # 名称
@@ -287,11 +317,11 @@ Cent OS 和 RedHat
      enable=1               # 启用
      gpgcheck=0             # 关闭签名检测
      ```
-     
+
      一个配置只能挂一个iso，如果要增加镜像路径，[local]和name两个字段都要改
-  
+
   2. 配置好文件后
-     
+
      ```shell
      yum clean all
      yum makecache
@@ -364,7 +394,7 @@ network:
 ## 修改ip
 
 1. 修改netplan配置文件
-   
+
    ```yaml
    network:
     version: 2
@@ -383,20 +413,20 @@ network:
    ```
 
 2. 应用新配置
-   
+
    测试配置文件
-   
+
    ```bash
    sudo netplan try
    ```
-   
+
    ```bash
    sudo netplan generate
    sudo netplan apply
    ```
 
 3. 检查生效情况
-   
+
    ```bash
    ip addr
    ```
@@ -416,23 +446,23 @@ sudo ip route add default via 192.168.1.1
 ## 连接无线网络
 
 * 需要以下软件
-  
+
   ```bash
   sudo apt install network-manager wpasupplicant wireless-tools
   ```
 
 * 扫描无线网卡
-  
+
   ```bash
   sudo iwlist wlol scan | grep ESSID
   ```
-  
+
   wlol是网卡名字，ip addr可查看，一般是wl开头的
-  
+
   记录WIFI的名称，例如wlan0
 
 * 配置netplan配置文件
-  
+
   ```yaml
   network:
     version: 2
@@ -449,20 +479,20 @@ sudo ip route add default via 192.168.1.1
   ```
 
 * 应用
-  
+
   ```bash
   sudo netplan try
   ```
-  
+
   ```bash
   sudo netplan generate
   sudo netplan apply
   ```
 
 * 如果连接到了网络，ip addr能看到IP
-  
+
   如果没有连接到网络，用以下命令尝试启动无线网卡
-  
+
   ```bash
   sudo ip link set wlan0 up
   ```
@@ -484,7 +514,7 @@ chsrc set ubuntu tuna
 # 桌面、服务器模式切换
 
 * 安装服务器
-  
+
   ```bash
   sudo apt install ubuntu-server
   # 或
@@ -492,7 +522,7 @@ chsrc set ubuntu tuna
   ```
 
 * 安装桌面
-  
+
   ```bash
   sudo apt install ubuntu-desktop
   # 或
@@ -500,14 +530,14 @@ chsrc set ubuntu tuna
   ```
 
 * 切换服务器终端模式
-  
+
   ```bash
   sudo systemctl set-default multi-user.target
   sudo reboot
   ```
 
 * 切换桌面图形模式
-  
+
   ```bash
   sudo systemctl set-default graphical.target
   sudo reboot
@@ -527,3 +557,53 @@ sudo apt install checkinstall
 用sudo checkinstall代替make install，checkinstall将会把所有文件打成一个deb包
 
 后续就可以用apt进行卸载了
+
+# gcc
+
+## 编译
+
+1. 查看原gcc编译参数
+
+   ```bash
+   gcc -v
+   ```
+
+   > Using built-in specs.
+   >  COLLECT_GCC=gcc
+   >  COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/9/lto-wrapper
+   >  OFFLOAD_TARGET_NAMES=nvptx-none:hsa
+   >  OFFLOAD_TARGET_DEFAULT=1
+   >  Target: x86_64-linux-gnu
+   >  Configured with: ../src/configure -v --with-pkgversion='Kylin 9.3.0-10kylin5k0.5' --with-bugurl=file:///usr/share/doc/gcc-9/README.Bugs --enable-languages=c,ada,c++,go,brig,d,fortran,objc,obj-c++,gm2 --prefix=/usr --with-gcc-major-version-only --program-suffix=-9 --program-prefix=x86_64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-vtable-verify --enable-plugin --with-system-zlib --with-target-system-zlib=auto --enable-objc-gc=auto --enable-multiarch --disable-werror --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --enable-multilib --with-tune=generic --enable-offload-targets=nvptx-none,hsa --without-cuda-driver --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
+   >  Thread model: posix
+   >  gcc version 9.3.0 (Kylin 9.3.0-10kylin5k0.5)
+
+2. configure
+
+   ```bash
+   cd gcc-10.5.0
+   mkdir build
+   cd build
+   ../configure --prefix=/opt/gcc-10.5.0
+   ```
+
+   **小心不要覆盖原有的gcc**
+   注意修改prefix，不要和原参数一样，不然会安装到原gcc路径下，可能会有冲突
+   一般配置参数和原参数保持一直即可，如果只需要c++，--enable-languages=c,c++
+   一般可以安装在opt下
+
+3. 编译
+
+   ```bash
+   make -j$(nproc)
+   make install
+   ```
+
+4. 应用
+
+   .bashrc
+
+   ```bash
+   export PATH=/opt/gcc-10.5.0/bin:$PATH
+   export LD_LIBRARY_PATH=/opt/gcc-10.5.0/lib64:$LD_LIBRARY_PATH
+   ```
