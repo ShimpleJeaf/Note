@@ -90,7 +90,7 @@ GNU 'tar' saves many files together into a single tape or disk archive, and can 
 
 -v          解压或压缩时显示正在处理的文件
 
--f <u>filename</u> -f后立即跟将被处理的文件
+-f <u>filename</u>    -f后立即跟将被处理的文件
 
 -C <u>path</u>     指定解压目录
 
@@ -111,6 +111,14 @@ package and compress (archive) files
 -y          保留软链接
 
 uzip        解压
+
+# cp
+
+-d    保留软链接
+
+-a    保留文件或文件夹的所有信息，包括软链接，也递归
+
+-r    递归
 
 # ssh
 
@@ -219,6 +227,26 @@ netstat -tunlp | grep <u>port</u>
 * 重做
 
   Ctrl-r
+
+* 打开新文件
+
+  :e filename
+
+* 读取文件到当前文件
+
+  * 插入到文件开头  :0r filename
+
+  * 插入到文件结尾  :$r filename
+
+* 多窗口操作
+
+  * 水平分割（上下）  :sp filename  
+
+  * 垂直分割（左右）  :vsplit filename
+
+  * 切换  Ctrl+w h/j/k/l
+
+  * 循环切换  Ctrl+w w
 
 ## diff
 

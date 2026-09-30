@@ -1,20 +1,20 @@
 # 常用操作
 
-| 操作                          | 说明                                           |
-| --------------------------- | -------------------------------------------- |
-| git status                  | 查看状态                                         |
-| git add <file>              | 添加新文件或者添加到暂存区                                |
-| git restore <file>          | 恢复工作区的更改到最近的提交，即丢弃工作区的更改                     |
-| git restore --staged <file> | 恢复暂存区的文件，即把暂存文件改为未暂存状态，文件内容不会改变              |
-| git rm --cached <file>      | 从HEAD删除，保留文件更改                               |
-| git commit -a               | 提交所有文件                                       |
-| git commit --amend          | 重新提交，覆盖上一次的提交                                |
-| git rm --cached <file>      | 删除文件，保留本地                                    |
-| git diff                    | 比较文件的不同，即暂存区和工作区的差异                          |
-| git difftool                | 使用外部差异工具查看和比较文件的更改                           |
+| 操作                        | 说明                                                                                 |
+| --------------------------- | ------------------------------------------------------------------------------------ |
+| git status                  | 查看状态                                                                             |
+| git add <file>              | 添加新文件或者添加到暂存区                                                           |
+| git restore <file>          | 恢复工作区的更改到最近的提交，即丢弃工作区的更改                                     |
+| git restore --staged <file> | 恢复暂存区的文件，即把暂存文件改为未暂存状态，文件内容不会改变                       |
+| git rm --cached <file>      | 从HEAD删除，保留文件更改                                                             |
+| git commit -a               | 提交所有文件                                                                         |
+| git commit --amend          | 重新提交，覆盖上一次的提交                                                           |
+| git rm --cached <file>      | 删除文件，保留本地                                                                   |
+| git diff                    | 比较文件的不同，即暂存区和工作区的差异                                               |
+| git difftool                | 使用外部差异工具查看和比较文件的更改                                                 |
 | git reset --mixed <hash>    | 默认模式，回滚提交，保留你所有的文件修改，但会将它们从“暂存区”移出，变成“未暂存”状态 |
-| git reset --soft <hash>     | 回滚提交，保留你所有的文件修改，并且保持它们在“暂存区”的状态              |
-| git reset --hard <hash>     | 危险！这会彻底删除你未提交的文件修改，且无法轻易恢复                   |
+| git reset --soft <hash>     | 回滚提交，保留你所有的文件修改，并且保持它们在“暂存区”的状态                         |
+| git reset --hard <hash>     | 危险！这会彻底删除你未提交的文件修改，且无法轻易恢复                                 |
 
 # vpn 代理
 
@@ -142,13 +142,13 @@ git gc 是指“垃圾回收（garbage collection）”，用于清理和优化 
 * `git fetch`是将远程主机的最新内容拉到本地，用户在检查了以后决定是否合并到工作本机分支中。
 
 * 拉取指定commit 
-  
+
   ```bash
   git fetch origin <commit-hash>
   ```
 
 * 只拉取一层记录
-  
+
   ```bash
   git fetch --depth=1 origin <commit-hash>
   ```
@@ -158,22 +158,22 @@ git gc 是指“垃圾回收（garbage collection）”，用于清理和优化 
 # checkout
 
 * 切换分支
-  
+
   ```bash
   # 切换到主分支
   git checkout master
   ```
 
 * 检出文件
-  
+
   将文件恢复到最近一次提交的状态
-  
+
   ```bash
   git checkout -- <file>
   ```
 
 * 切换到特定提交
-  
+
   ```bash
   git checkout <commit-hash>
   ```
@@ -183,6 +183,8 @@ git gc 是指“垃圾回收（garbage collection）”，用于清理和优化 
 .gitignore的语法如下：
 
 * 所有空行或者以 ＃ 开头的行都会被 Git 忽略
+
+* *只匹配单层路径，**匹配任意层级的路径，可以跨越目录分隔符
 
 * ! 表示不忽略
 
@@ -203,6 +205,8 @@ git gc 是指“垃圾回收（garbage collection）”，用于清理和优化 
 ```bash
 git check-ignore -v <path>
 ```
+
+## 忽略即部分取消忽略
 
 当忽略父目录时，无法取消忽略子目录：
 
@@ -236,19 +240,19 @@ git check-ignore -v <path>
 1. 将原仓库克隆到本地
 
 2. 移除原远程仓库
-   
+
    ```bash
    git remote remove origin
    ```
 
 3. 添加新的远程仓库
-   
+
    ```bash
    git remote add origin <new_repository_url>
    ```
 
 4. 将代码推送到新的仓库
-   
+
    ```bash
    git push -u origin master
    ```
@@ -267,11 +271,11 @@ git config http.postBuffer 8192000000
 > fatal: protocol error: bad line length 8192 47.18 MiB/s
 
 * 可以分部push记录：
-  
+
   先reset到开始的commit记录，再进行push
 
 * push指定的commit记录，第一次推送时不能用，所以第一次推送必须先reset
-  
+
   ```bash
   git push origin d3a34:master
   ```
@@ -288,53 +292,68 @@ git branch --no-merged 查看所有未合并工作的分支
 ```
 
 * 创建分支
-  
+
   ```bash
   git branch branchname
   ```
 
 * 切换分支
-  
+
   ```bash
   git switch branchname
   ```
-  
+
   ```bash
   git checkout branchname
   ```
 
 * 创建并切换分支，可指定tag或其他分支为基准
-  
+
   ```bash
   git switch -c branchname
   ```
-  
+
   ```bash
   git checkout -b branchname <tag>
   ```
 
 * 删除分支
-  
+
   ```bash
   git branch -d branchname
   ```
 
 * 合并分支
-  
+
   先将分支commit
-  
+
   切换到master分支
-  
+
   ```bash
   git merge branchname
   ```
 
 * 删除远程分支
-  
+
   ```bash
   git push remote_name -d remote_branchname
   # 例如：
   git push origin -d scene
+  ```
+
+* 拉取额外分支
+
+  使用--depth 1克隆的仓库，只用main分支，如果需要其他分支，可用以下方式拉取
+
+  ```bash
+  # 追踪远程的dev分支
+  git remote set-branches --add origin dev
+  
+  # 拉取分支
+  git fetch --depth=1 origin dev
+  
+  # 切换分支
+  git switch dev
   ```
 
 # rebase
@@ -360,59 +379,59 @@ git rebase master
 **不会保存commit，切分支的话commit由分支系统保存**
 
 * 保存临时修改
-  
+
   不加子命令时使用push
-  
+
   git stash
-  
+
   或
-  
+
   git stash push -m ["修改信息"]
-  
+
   git stash save -m [“修改信息”]
-  
+
   * -u | --include-untracked 
-    
+
     包括untracked文件
-  
+
   * -a | --all
-    
+
     包括untracked、ignored文件
 
 * 删除stash
-  
+
   ```bash
   git stash drop 0
   ```
 
 * 列出保存的临时修改
-  
+
   ```bash
   git stash list
   ```
 
 * 应用临时修改，stash@{0}是修改的标识
-  
+
   ```bash
   git stash apply stash@{0}
   ```
-  
+
   也可以直接用编号
-  
+
   ```bash
   git stash apply 0
   ```
 
 * 弹出临时修改
-  
+
   应用临时修改，并从stash list里删除
-  
+
   ```bash
   git stash pop 0
   ```
 
 * 显示更改信息，会显示简略的文件变化信息
-  
+
   ```bash
   git stash show 0
   ```
@@ -420,35 +439,35 @@ git rebase master
 # 从历史记录中删除一个文件
 
 * filter-branch
-  
+
   新版本git已经不推荐使用该工具了
-  
+
   ```bash
   git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch secret.txt' --prune-empty --tag-name-filter cat -- --all
   ```
-  
+
   secret.txt将从版本记录中完全删除
-  
+
   注意：
-  
+
   * 这是一个耗时的操作
-  
+
   * 文件路径是相对于git仓库根目录的
-  
+
   * 文件路径不要以 / 开头，否则将会认为是相对git安装目录的路径
-  
+
   * 如果是删除文件夹，在 --cache 后加 -r 递归删除
 
 * fliter-repo
-  
+
   安装：
-  
+
   ```bash
   pip install git-filter-repo
   ```
-  
+
   使用：
-  
+
   ```bash
   git filter-repo --path example.txt --invert-paths
   ```
@@ -464,38 +483,38 @@ git rebase master
 1. 备份仓库
 
 2. 安装并初始化lfs
-   
+
    ```bash
    git lfs install
    ```
 
 3. 识别需要迁移的大文件
-   
+
    ```bash
    find . -type f -size +10M
    ```
 
 4. 执行迁移命令
-   
+
    ```bash
    git lfs migrate import --everything --include="*.webp,*.png,*.jpg,*.mp3,*.mp4"
    ```
-   
+
    * --everything： 会重写所有本地分支和标签
-   
+
    * --include：制定需要迁移的文件模式，可以用逗号分隔多个模式
 
 5. 提交.gitattributes文件
-   
+
    ```bash
    git add .gitattributes
    git commit -m "chore: Configure Git LFS tracking"
    ```
 
 6. 强制推送到远程仓库
-   
+
    因为重写了历史记录，无法直接push
-   
+
    ```bash
    # 推送所有被重写的分支
    git push --force-with-lease --all origin
@@ -506,7 +525,7 @@ git rebase master
 7. 通知所有协作者同步
 
 8. 清理本地的.git目录
-   
+
    ```bash
    git reflog expire --expire=now --all
    git gc --prune=now --aggressive
