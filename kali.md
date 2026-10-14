@@ -1,3 +1,29 @@
+# kali
+
+* vmware鼠标不显示
+
+  升级虚拟机的兼容版本到17.x（或以上）
+
+# zmap
+
+* 默认使用tcp syn进行扫描
+
+* 默认排除局域网地址，如果要扫描，加-b /dev/null
+
+| 参数 | 说明                                                              |
+| ---- | ----------------------------------------------------------------- |
+| -p   | 扫描端口，80/1-80/22,80,8080/'*'                                  |
+| -b   | 指定blocklist，用/dev/null临时指定blocklist为空，可扫描局域网地址 |
+| -M   | 指定扫描方式，默认为tcp_synscan，ping为icmp_echoscan              |
+| -o   | 结果输出到指定文件                                                |
+| -f   | 指定输出字段，saddr（ip），多端口扫描时会输出重复ip               |
+| -X   | 指定源ip，主机有多个ip时可能需要指定                              |
+
+```bash
+sudo zmap -p 80 192.168.1.0/24 -b /dev/null
+sudo zmap -p 22,443,80,8080,134,3389,23,139,445,21,25,110,143,3306,5432,27017,161,5060,1900,5222,5672,1883 -X 192.168.1.20 211.95.x.0/24 -o 211.95.x_24_zmap
+```
+
 # nmap
 
 * 端口扫描时默认扫描最常用的1000个tcp端口
@@ -36,20 +62,31 @@
 | -sN/sF/sX       | TCP Null, FIN, and Xmas scans                |
 | -sU             | 扫描udp端口                                  |
 | -sV             | 扫描端口的服务和版本信息                     |
+| -T              | 扫描时间模版，0-5，越大越快，太快可能漏报    |
 
 ```bash
 # 先粗略扫描，可以先不用-p-扫描常用端口，如果没有有用的，再加上扫描全端口
-sudo nmap -sS -Pn -p- 192.168.1.1
+# -Pn时默认-sS
+sudo nmap -Pn -p- 192.168.1.1
 # 指定端口扫描
 sudo nmap -sV -A -Pn -p 80 192.168.1.1
 ```
 
+从nmap输出得到端口列表，结果为22,80,8080的形式
+
+```bash
+grep -E '^[0-9]+/tcp' port.txt | cut -d/ -f1 | tr '\n' ',' | sed 's/,$//'
+```
+
 ## 工具
 
-| 参数 | 说明                                    |
-| ---- | --------------------------------------- |
-| -O   | 启用os探测                              |
-| -A   | 启动OS、version、script、traceroute检测 |
+| 参数           | 说明                                                                |
+| -------------- | ------------------------------------------------------------------- |
+| -O             | 启用os探测                                                          |
+| -A             | 启动OS、version、script、traceroute检测                             |
+| -iL            | 指定扫描ip列表文件                                                  |
+| -oN/oX/oS/oA   | 输出文件，normal/xml/s/所有类型                                     |
+| --host-timeout | 指定单ip扫描时间上限，避免扫描太久，因为有些ip对-sV会所有端口都open |
 
 ## 漏洞探测
 
@@ -76,7 +113,47 @@ sudo nmap -sV -A -Pn -p 80 192.168.1.1
   sudo nmap -sV --script=vulscan/vulscan.nse <目标IP>
   ```
 
+## 示例
+
+* 扫描ip
+
+  ```bash
+  sudo zmap -f saddr -p 22,443,80,8080,134,3389,23,139,445,21,25,110,143,3306,5432,27017,161,5060,1900,5222,5672,1883 -X 192.168.1.20 211.95.x.0/24 -o 211.95.x_24_zmap
+  ```
+
+* ip去重
+
+  ```bash
+  sudo sort -u 211.95.x_24_zmap -o 211.95.x_24_zmap
+  ```
+
+* 扫描端口
+
+  ```bash
+  sudo nmap -sS -Pn -n -iL 211.95.x_24_zmap -oN 211.95_x_24_nmap --host-timeout 1m
+  ```
+
 # Metasploit Framework
+
+模块分类：
+
+| 名称      | 类型                   |
+| --------- | ---------------------- |
+| exploiet  | 利用                   |
+| auxiliary | 辅助（探测等辅助功能） |
+| post      | 后渗透                 |
+| payloads  | 载荷                   |
+| encoders  | 编码器                 |
+| nops      | 空操作指令             |
+| evasion   | 免杀                   |
+
+启动：msfconsole
+
+* 查看帮助
+
+  ```bash
+  help
+  ```
 
 * 搜索cve
 
@@ -91,6 +168,10 @@ sudo nmap -sV -A -Pn -p 80 192.168.1.1
   set RHOSTS 192.168.1.8
   check
   ```
+
+* 查看信息
+
+  use对应的模块后，使用info命令
 
 # aircrack-ng
 
@@ -148,3 +229,9 @@ sudo nmap -sV -A -Pn -p 80 192.168.1.1
    * 另外也可使用GPU进行跑字典。
 
    * 如果字典没有，也可使用电话号码进行跑字典。
+
+# sqlmap
+
+-u url
+
+# OpenCVE
